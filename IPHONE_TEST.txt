@@ -1,0 +1,16 @@
+SET/5 auf dem iPhone testen
+
+VARIANTE A – Lokales WLAN
+1. Entpacke diesen Ordner auf einem Mac oder PC.
+2. Öffne ein Terminal in diesem Ordner.
+3. Starte: python3 -m http.server 8000
+4. Öffne auf dem iPhone in Safari:
+   http://IP-DEINES-COMPUTERS:8000
+5. Beide Geräte müssen im selben WLAN sein.
+
+VARIANTE B – Statisches Hosting
+Lade den gesamten Ordner bei einem statischen Hoster oder in ein
+GitHub-Pages-Repository. Die Datei index.html wird automatisch als Startseite verwendet.
+
+Danach auf dem iPhone:
+Safari > Teilen > Zum Home-Bildschirm.
