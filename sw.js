@@ -1,24 +1,54 @@
-# SET/5 – GitHub Pages v1.8.2
+const CACHE_NAME = "set5-v1.9.0";
+const APP_SHELL = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/icon-maskable-512.png"
+];
 
-## Behoben
+self.addEventListener("install", event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
+});
 
-- Shop wird nicht mehr abgeschnitten
-- Angebote sind intern scrollbar
-- Kaufen und Sperren bleiben erreichbar
-- Refresh und Weiter bleiben sichtbar
-- größere Würfel
-- besser genutzte Board-Höhe
-- größere Status- und Gruppenfelder
-- eigener Kompaktmodus für niedrige Displays
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
+});
 
-## Deployment
+self.addEventListener("message", event => {
+  if (event.data?.type === "SKIP_WAITING") self.skipWaiting();
+});
 
-Den kompletten Inhalt dieses Ordners in die Repository-Root kopieren.
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
 
-Mindestens ersetzen:
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put("./index.html", copy));
+          return response;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
 
-- `index.html`
-- `404.html`
-- `sw.js`
-
-Der Service Worker verwendet den Cache `set5-v1.8.2`.
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+      return fetch(event.request).then(response => {
+        if (!response || response.status !== 200 || response.type === "opaque") return response;
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        return response;
+      });
+    })
+  );
+});

@@ -1,42 +1,37 @@
-{
-  "id": "./",
-  "name": "SET/5 Dice Roguelite",
-  "short_name": "SET/5",
-  "description": "SET/5 v1.8.2 – Dice Roguelite mit großzügigem Mobile-Layout und vollständig bedienbarem Shop.",
-  "lang": "de",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "display_override": [
-    "window-controls-overlay",
-    "standalone",
-    "minimal-ui"
-  ],
-  "orientation": "portrait-primary",
-  "background_color": "#f7f4ec",
-  "theme_color": "#f7f4ec",
-  "categories": [
-    "games",
-    "entertainment"
-  ],
-  "icons": [
-    {
-      "src": "./icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icons/icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ]
-}
+# SET/5 – GitHub Pages v1.9
+
+## Wichtig
+
+v1.9 behebt einen JavaScript-Fehler, durch den der Shop nur teilweise gerendert wurde.
+
+Außerdem enthält die Version eine vollständige Vereinheitlichung von:
+
+- Abständen
+- Schriftgrößen
+- Konturen
+- Schatten
+- Board
+- Shop
+- Dialogen
+- Overlays
+- responsive Höhen
+
+## Deployment
+
+Den vollständigen Inhalt dieses Ordners in die Root-Ebene des Repositories kopieren:
+
+- `index.html`
+- `404.html`
+- `manifest.webmanifest`
+- `sw.js`
+- `.nojekyll`
+- `icons/`
+
+Der Service Worker verwendet den Cache `set5-v1.9.0`.
+
+Nach dem Deployment:
+
+1. Seite vollständig neu laden.
+2. Home-Screen-App vollständig schließen.
+3. App erneut öffnen.
+4. Bei weiterhin alter Version Website-Daten beziehungsweise den alten PWA-Cache entfernen.
