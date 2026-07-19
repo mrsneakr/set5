@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <title>SET/5 v1.6 – UX & Balance Calibration</title>
+  <title>SET/5 v1.7 – One Screen / Clear Build</title>
   <style>
     :root {
       --ink: #17171b;
@@ -1929,13 +1929,171 @@
       .combo-name { max-width:82px; }
     }
 
+
+
+    /* v1.7 · One Screen / Clear Build */
+    .game-icon { width:20px; height:20px; display:block; flex:0 0 auto; }
+    .status-icon .game-icon, .hint-icon .game-icon { width:18px; height:18px; }
+    .combo-name .game-icon { width:15px; height:15px; display:inline-block; vertical-align:-3px; margin-right:3px; }
+
+    #shopScreen, #rewardScreen, #pathScreen, #endScreen {
+      position:fixed;
+      inset:0;
+      z-index:45;
+      padding:max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      background:rgba(247,244,236,.94);
+      backdrop-filter:blur(8px);
+    }
+    #shopScreen:not(.hidden), #rewardScreen:not(.hidden), #pathScreen:not(.hidden), #endScreen:not(.hidden) {
+      display:grid;
+      align-items:start;
+    }
+    #shopScreen .screen-card, #rewardScreen .screen-card, #pathScreen .screen-card, #endScreen .screen-card {
+      width:min(100%, 460px);
+      margin:auto;
+      max-height:none;
+      box-shadow:0 14px 0 rgba(23,23,27,.09);
+    }
+    body.overlay-active { overflow:hidden; }
+    body.overlay-active #gameScreen { pointer-events:none; filter:saturate(.88); }
+
+    .score-sequence {
+      position:fixed;
+      inset:0;
+      z-index:90;
+      border-radius:0;
+      padding:max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+      background:rgba(247,244,236,.96);
+      backdrop-filter:blur(9px);
+      overflow:hidden;
+    }
+    .score-sequence-card {
+      width:min(100%, 430px);
+      height:min(900px, calc(100dvh - max(20px, env(safe-area-inset-top)) - max(20px, env(safe-area-inset-bottom))));
+      max-height:100%;
+      display:grid;
+      grid-template-rows:auto minmax(0,1fr);
+      overflow:hidden;
+      padding:12px;
+    }
+    .sequence-head { margin:0 0 8px; align-items:center; }
+    .sequence-head > div { display:grid; gap:2px; }
+    .sequence-head span { display:block; }
+    .score-ledger-btn {
+      border:2px solid var(--line);
+      border-radius:12px;
+      background:white;
+      min-height:36px;
+      padding:0 10px;
+      font-size:9px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+    .score-theatre {
+      min-height:0;
+      display:grid;
+      grid-template-rows:minmax(250px,1fr) auto 168px;
+      gap:8px;
+    }
+    .theatre-stage { min-height:0; overflow:hidden; }
+    .theatre-math { min-height:0; max-height:180px; overflow:hidden; }
+    .sequence-history-head { display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:9px; font-weight:1000; letter-spacing:.08em; }
+    .sequence-history-head small { font-size:8px; letter-spacing:0; }
+    .sequence-rows {
+      max-height:none;
+      min-height:0;
+      overflow:hidden;
+      display:grid;
+      align-content:end;
+      gap:6px;
+    }
+    .sequence-row { min-height:44px; animation:none; }
+    .sequence-row.next { opacity:.38; border-style:dashed; }
+    .sequence-row.compact small { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sequence-summary {
+      min-height:34px;
+      border:2px dashed rgba(23,23,27,.18);
+      border-radius:11px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:5px 9px;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:950;
+      background:rgba(255,255,255,.65);
+    }
+
+    .combo-hint {
+      width:100%;
+      appearance:none;
+      font:inherit;
+      cursor:pointer;
+    }
+    .combo-hint::after { content:'›'; color:var(--ink); font-size:16px; margin-left:auto; }
+    .die-wrap.hint-focus .die { outline:4px solid rgba(76,166,255,.34); outline-offset:2px; }
+    .die-wrap.hint-change .die { outline:3px dashed rgba(255,79,131,.52); outline-offset:3px; }
+
+    .build-compass-head {
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:10px;
+      align-items:center;
+      border:2.5px solid var(--line);
+      border-radius:18px;
+      padding:11px;
+      background:#f3efff;
+    }
+    .build-compass-icon {
+      width:46px; height:46px; border:2.5px solid var(--line); border-radius:15px;
+      display:grid; place-items:center; background:white;
+    }
+    .build-compass-icon .game-icon { width:26px; height:26px; }
+    .build-compass-head strong { display:block; font-size:16px; }
+    .build-compass-head span { color:var(--muted); font-size:10px; font-weight:900; text-transform:uppercase; }
+    .compass-section { margin-top:12px; }
+    .compass-section h3 { margin:0 0 6px; }
+    .compass-goals { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+    .compass-goal {
+      border:2px solid var(--line); border-radius:13px; padding:8px; background:white;
+      display:flex; gap:7px; align-items:center; min-height:48px; font-size:11px; font-weight:950;
+    }
+    .compass-goal .game-icon { width:18px; height:18px; }
+    .compass-now { border-left:6px solid var(--violet); background:#faf5ff; }
+    .compass-meter { display:flex; gap:4px; align-items:center; }
+    .compass-meter i { width:9px; height:9px; border:1.5px solid var(--line); border-radius:50%; background:white; }
+    .compass-meter i.on { background:var(--violet); }
+
+    .offer { grid-template-columns:42px minmax(0,1fr) auto; padding:9px; gap:8px; }
+    .offer h3 { font-size:13px; }
+    .offer p { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .offer-meta { max-height:21px; overflow:hidden; }
+    .synergy-badge { margin-top:4px; min-height:25px; }
+    .synergy-button { cursor:pointer; }
+    .synergy-button:active { transform:translateY(1px); }
+
+    dialog.bottom-sheet {
+      width:min(100%, 520px);
+      max-height:min(82dvh, 760px);
+      margin:auto auto 0;
+      border-radius:26px 26px 0 0;
+    }
+
+    @media (max-height:720px) {
+      .score-theatre { grid-template-rows:minmax(210px,1fr) auto 145px; }
+      .theatre-math { max-height:138px; }
+      .sequence-row { min-height:38px; padding:5px 8px; }
+    }
+
   </style>
 </head>
 <body>
   <main class="app">
     <section id="introScreen" class="screen-card">
       <div class="brand">SET<span>/5</span></div>
-      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.6</small></h1>
+      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.7</small></h1>
       <p>Wirf, halte und teile deine Würfel in bis zu drei Gruppen. Baue im Shop einen Run, der immer stärker und seltsamer wird.</p>
 
       <div class="intro-steps">
@@ -2032,11 +2190,11 @@
           <span id="contractDot" class="status-dot" aria-hidden="true"></span>
         </button>
         <button id="buildStatusBtn" class="status-pill" type="button" aria-label="Mods anzeigen">
-          <span class="status-icon">◇</span>
+          <span class="status-icon"></span>
           <span id="buildShort" class="status-text">0/5 MODS</span>
         </button>
         <button id="programStatusBtn" class="status-pill" type="button" aria-label="Programme anzeigen">
-          <span class="status-icon">⌁</span>
+          <span class="status-icon"></span>
           <span id="programShort" class="status-text">PROGRAMME</span>
         </button>
       </nav>
@@ -2048,7 +2206,7 @@
         </div>
 
         <div id="diceGrid" class="dice-grid" aria-live="polite"></div>
-        <div id="comboHint" class="combo-hint hidden" aria-live="polite"></div>
+        <button id="comboHint" class="combo-hint hidden" type="button" aria-live="polite" aria-label="Build-Empfehlung öffnen"></button>
         <div id="groupPicker" class="group-picker hidden" aria-live="polite">
           <span id="groupPickerLabel">Würfel wählen</span>
           <button type="button" data-assign-group="0">FREI</button>
@@ -2072,7 +2230,10 @@
         <div id="groups" class="groups"></div>
         <div id="scoreSequence" class="score-sequence hidden" aria-live="assertive">
           <div class="score-sequence-card">
-            <div class="sequence-head"><strong>WERTUNG</strong><span>Tippen = skip</span></div>
+            <div class="sequence-head">
+              <div><strong>WERTUNG</strong><span id="sequenceStepLabel">Schritt 0 / 0</span></div>
+              <button id="scoreLedgerBtn" class="score-ledger-btn" type="button">RECHNUNG</button>
+            </div>
             <div class="score-theatre">
               <div class="theatre-stage" id="theatreStage">
                 <div class="theatre-head">
@@ -2087,6 +2248,7 @@
                   <div class="theatre-progress-bar"><span id="sequenceProgressFill"></span></div>
                 </div>
               </div>
+              <div class="sequence-history-head"><span>VERLAUF</span><small>Tippen auf freien Bereich = überspringen</small></div>
               <div id="sequenceRows" class="sequence-rows"></div>
             </div>
           </div>
@@ -2207,7 +2369,7 @@
     </div>
   </dialog>
 
-  <dialog id="detailDialog">
+  <dialog id="detailDialog" class="bottom-sheet">
     <div class="dialog-inner">
       <h2 id="detailTitle">Details</h2>
       <div id="detailBody"></div>
@@ -2555,7 +2717,7 @@
         ["Data", "Meta-Währung aus abgeschlossenen Runs. Sie schaltet Startsets und später neue Inhalte frei, aber keine permanenten Stats."]
       ];
 
-      const SAVE_VERSION = 16;
+      const SAVE_VERSION = 17;
       const META_DEFAULTS = {
         version:9,
         data:0,
@@ -2584,21 +2746,109 @@
         high:"▲", maximum:"⚡", sum:"·", empty:"–", locked:"×"
       };
 
+
+      const ICON_PATHS = {
+        pair:'<rect x="4" y="7" width="8" height="8" rx="2"></rect><rect x="12" y="9" width="8" height="8" rx="2"></rect>',
+        triple:'<path d="M5 7h14M5 12h14M5 17h14"></path>',
+        four:'<circle cx="8" cy="8" r="2"></circle><circle cx="16" cy="8" r="2"></circle><circle cx="8" cy="16" r="2"></circle><circle cx="16" cy="16" r="2"></circle>',
+        five:'<rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="8" cy="8" r="1.3" fill="currentColor"></circle><circle cx="16" cy="8" r="1.3" fill="currentColor"></circle><circle cx="12" cy="12" r="1.3" fill="currentColor"></circle><circle cx="8" cy="16" r="1.3" fill="currentColor"></circle><circle cx="16" cy="16" r="1.3" fill="currentColor"></circle>',
+        sequence:'<path d="M4 17h5v-5h5V7h6"></path><path d="m17 4 3 3-3 3"></path>',
+        target:'<circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2" fill="currentColor"></circle>',
+        parity:'<circle cx="12" cy="12" r="8"></circle><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" opacity=".22"></path><path d="M12 4v16"></path>',
+        power:'<path d="m13 3-7 11h6l-1 7 7-11h-6z"></path>',
+        flow:'<path d="M4 16c4 0 4-8 8-8h7"></path><path d="m16 5 3 3-3 3"></path>',
+        signature:'<path d="m12 3 8 9-8 9-8-9z"></path><path d="m8 12 4 4 4-4"></path>',
+        chips:'<rect x="5" y="7" width="14" height="10" rx="3"></rect><path d="M8 5h8M8 19h8"></path>',
+        plusmult:'<circle cx="12" cy="12" r="8"></circle><path d="M8 12h8M12 8v8"></path>',
+        xmult:'<circle cx="12" cy="12" r="8"></circle><path d="m9 9 6 6m0-6-6 6"></path>',
+        proc:'<path d="M12 3v5m0 8v5M3 12h5m8 0h5M6 6l3 3m6 6 3 3m0-12-3 3m-6 6-3 3"></path>',
+        scaling:'<path d="M12 12c0-3 4-3 4 0 0 5-8 6-10 1-3-7 6-13 12-7 7 6 1 17-8 15"></path>',
+        coin:'<circle cx="12" cy="12" r="8"></circle><path d="M9 9h5a2 2 0 0 1 0 4h-4a2 2 0 0 0 0 4h5M12 7v10"></path>',
+        program:'<path d="M5 17h4v-4h4V9h4V5h2"></path>',
+        boss:'<path d="M12 3 21 20H3z"></path><path d="M12 9v5m0 3v.1"></path>',
+        build:'<path d="m12 3 7 7-7 11-7-11z"></path><path d="M8 10h8"></path>',
+        die:'<rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="12" cy="12" r="1.6" fill="currentColor"></circle>',
+        info:'<circle cx="12" cy="12" r="9"></circle><path d="M12 11v6m0-10v.1"></path>'
+      };
+
+      function gameIcon(name, className = "") {
+        const path = ICON_PATHS[name] || ICON_PATHS.info;
+        return `<svg class="game-icon ${escapeHtml(className)}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+      }
+
+      function offerIconKey(offer) {
+        if (offer?.kind === "die") return "die";
+        if (offer?.kind === "program") return "program";
+        if (offer?.kind === "pack") return "signature";
+        if (["station","slot"].includes(offer?.kind)) return "build";
+        const axis = scoreAxisForOffer(offer);
+        if (axis === "chips") return "chips";
+        if (axis === "mult") return "plusmult";
+        if (axis === "xmult") return isScalingEngine(offer?.id) ? "scaling" : "xmult";
+        if (axis === "proc") return "proc";
+        if (axis === "economy") return "coin";
+        return "info";
+      }
+
+      function programIconKey(id) {
+        return { pair:"pair", triple:"pair", straight:"sequence", target:"target", parity:"parity", high:"power" }[id] || "program";
+      }
+
+      function rewardIconKey(id) {
+        if (/capital|rebate|coin|bond/.test(id || "")) return "coin";
+        if (/program/.test(id || "")) return "program";
+        if (/dice|prototype/.test(id || "")) return "die";
+        if (/pack|cache/.test(id || "")) return "signature";
+        if (/core|control|slot/.test(id || "")) return "build";
+        return "signature";
+      }
+
+      function pathIconKey(id) {
+        return { pair:"pair", triple:"pair", straight:"sequence", target:"target", parity:"parity", high:"power", flow:"flow" }[id] || "build";
+      }
+
+      function comboIconKey(type) {
+        if (["pair","triple"].includes(type)) return "pair";
+        if (type === "four_kind") return "four";
+        if (type === "five_kind") return "five";
+        if (["straight","straight4","grand_straight"].includes(type)) return "sequence";
+        if (type === "target") return "target";
+        if (["parity","parity4","grand_parity"].includes(type)) return "parity";
+        if (["high","maximum"].includes(type)) return "power";
+        return "info";
+      }
+
+      const BUILD_GUIDE = {
+        Pair:{ icon:"pair", goals:["Four Kind","Five Kind","Full House"], setup:["Pair","Triple"], family:"pair" },
+        Sequence:{ icon:"sequence", goals:["Straight 4","Grand Straight","Perfect Split"], setup:["Straight 3","Exact 10"], family:"straight" },
+        Target:{ icon:"target", goals:["Double Exact","Perfect Split","Perfect Flow"], setup:["Exact 10","Pair"], family:"target" },
+        Parity:{ icon:"parity", goals:["Parity 4","Grand Parity","Perfect Flow"], setup:["Parity Trio","Exact 10"], family:"parity" },
+        Power:{ icon:"power", goals:["Maximum","Power Trio","Full House"], setup:["Triple","High values"], family:"high" },
+        Pulse:{ icon:"proc", goals:["Premium-Kombo korrigieren","Proc aktivieren"], setup:["±1 / ±2 nutzen"], family:"pulse" },
+        Economy:{ icon:"coin", goals:["Coins halten","Scaling finanzieren"], setup:["Zins sichern"], family:"economy" },
+        Frozen:{ icon:"chips", goals:["Cryobank stapeln","Würfel halten"], setup:["Frost-Würfel"], family:"frozen" },
+        Volatile:{ icon:"proc", goals:["High-Roll","Proc-Kette"], setup:["Risiko kontrollieren"], family:"volatile" },
+        Diversity:{ icon:"flow", goals:["Perfect Flow","verschiedene Typen"], setup:["Typen mischen"], family:"diversity" },
+        Minimal:{ icon:"build", goals:["Alle Würfel nutzen","Lean Machine"], setup:["5-Würfel-Pool"], family:"minimal" }
+      };
+
       let nextDieId = 1;
       let toastTimer = null;
       let audioContext = null;
-      const SAVE_KEY = "set5_run_v16";
-      const LEGACY_SAVE_KEYS = ["set5_run_v13","set5_run_v09", "set5_run_v08", "set5_run_v07", "set5_run_v06", "set5_run_v05"];
-      const SETTINGS_KEY = "set5_settings_v16";
-      const LEGACY_SETTINGS_KEYS = ["set5_settings_v13","set5_settings_v09", "set5_settings_v08", "set5_settings_v07", "set5_settings_v06"];
-      const META_KEY = "set5_meta_v16";
-      const LEGACY_META_KEYS = ["set5_meta_v13","set5_meta_v09", "set5_meta_v08"];
+      const SAVE_KEY = "set5_run_v17";
+      const LEGACY_SAVE_KEYS = ["set5_run_v16","set5_run_v15","set5_run_v13","set5_run_v09", "set5_run_v08", "set5_run_v07", "set5_run_v06", "set5_run_v05"];
+      const SETTINGS_KEY = "set5_settings_v17";
+      const LEGACY_SETTINGS_KEYS = ["set5_settings_v16","set5_settings_v15","set5_settings_v13","set5_settings_v09", "set5_settings_v08", "set5_settings_v07", "set5_settings_v06"];
+      const META_KEY = "set5_meta_v17";
+      const LEGACY_META_KEYS = ["set5_meta_v16","set5_meta_v15","set5_meta_v13","set5_meta_v09", "set5_meta_v08"];
       const TUTORIAL_KEY = "set5_tutorial_done";
       let settings = loadSettings();
       let meta = loadMeta();
       let deferredInstallPrompt = null;
       let waitingServiceWorker = null;
       let skipScoreAnimation = false;
+      let lastScoreLedger = [];
+      let currentScoreStep = 0;
 
       function freshStats() {
         return {
@@ -2608,7 +2858,8 @@
           failedContracts:0, allInSuccess:0, allInFail:0, goldCoins:0, diceTraits:0,
           signatureCounts:{ full_house:0, perfect_split:0, double_exact:0 },
           bossRewards:0, recycledChips:0, faceMods:0, riskTraits:0, savesLoaded:0,
-          dataEarned:0, bossesSeen:{}, startSet:"standard", roundHands:{}, roundScores:{}, roundTargets:{}, encounterHistory:[]
+          dataEarned:0, bossesSeen:{}, startSet:"standard", roundHands:{}, roundScores:{}, roundTargets:{}, encounterHistory:[],
+          sourceTotals:{}, roundWinTurns:{}, roundOverfill:{}, handTargetRatios:[], firstEngineRound:0, firstXMultRound:0, buildOnlineRound:0
         };
       }
 
@@ -2677,7 +2928,9 @@
         encounterHistory: [],
         setEncounterHistory: [],
         midgamePathChosen: false,
-        pathChoices: []
+        pathChoices: [],
+        expandedGroup: 0,
+        queuedBoss: null
       };
 
       const $ = (id) => document.getElementById(id);
@@ -2781,6 +3034,10 @@
         migrated.stats.comboCounts = { ...freshStats().comboCounts, ...(migrated.stats.comboCounts || {}) };
         migrated.stats.bossesSeen = { ...(migrated.stats.bossesSeen || {}) };
         migrated.stats.signatureCounts = { ...freshStats().signatureCounts, ...(migrated.stats.signatureCounts || {}) };
+        migrated.stats.sourceTotals = { ...(migrated.stats.sourceTotals || {}) };
+        migrated.stats.roundWinTurns = { ...(migrated.stats.roundWinTurns || {}) };
+        migrated.stats.roundOverfill = { ...(migrated.stats.roundOverfill || {}) };
+        migrated.stats.handTargetRatios = [...(migrated.stats.handTargetRatios || [])];
         migrated.stats.startSet ||= migrated.startSet;
         migrated.nextRound = { rerolls:0, turns:0, startScore:0, ...(migrated.nextRound || {}) };
         migrated.comboLevels = { pair:1, triple:1, straight:1, target:1, parity:1, high:1, ...(migrated.comboLevels || {}) };
@@ -3544,6 +3801,7 @@
           steps.push({
             cls: isQualified(result) ? 'combo' : 'add',
             icon,
+            iconKey:comboIconKey(result.type),
             title: `G${index + 1}`,
             detail: detailBits.join(' · '),
             delta: (result.scoredTotal || 0),
@@ -3576,7 +3834,7 @@
 
         if (preview.perfectFlow) {
           const next = Math.round(running * 1.50);
-          steps.push({ cls:'mult', icon:'✦', title:'Perfect Flow', detail:'Alle Gruppen echt + unterschiedlich + alle Würfel', delta:next - running, before:running, after:next,
+          steps.push({ cls:'mult', icon:'✦', iconKey:'flow', title:'Perfect Flow', detail:'Alle Gruppen echt + unterschiedlich + alle Würfel', delta:next - running, before:running, after:next,
             stageEyebrow:'FLOW', stageTitle:'Perfect Flow',
             stageFormula:[
               { label:'Vorher', value:running, kind:'mult' },
@@ -3589,7 +3847,7 @@
 
         if (preview.signature) {
           const next = Math.round(running * preview.signature.factor);
-          steps.push({ cls:'signature', icon:preview.signature.icon, title:preview.signature.name, detail:'Signature Hand', delta:next - running, before:running, after:next,
+          steps.push({ cls:'signature', icon:preview.signature.icon, iconKey:'signature', title:preview.signature.name, detail:'Signature Hand', delta:next - running, before:running, after:next,
             stageEyebrow:'SIGNATURE', stageTitle:preview.signature.name,
             stageFormula:[
               { label:'Vorher', value:running, kind:'signature' },
@@ -3602,7 +3860,7 @@
 
         if (!preview.contractMet && state.contract) {
           const next = Math.round(running * preview.contractFactor);
-          steps.push({ cls:'penalty', icon:'!', title:'Auftrag verfehlt', detail:`nur ${Math.round(preview.contractFactor * 100)} % Wertung`, delta:next - running, before:running, after:next,
+          steps.push({ cls:'penalty', icon:'!', iconKey:'boss', title:'Auftrag verfehlt', detail:`nur ${Math.round(preview.contractFactor * 100)} % Wertung`, delta:next - running, before:running, after:next,
             stageEyebrow:'MALUS', stageTitle:'Auftrag verfehlt',
             stageFormula:[
               { label:'Vorher', value:running, kind:'penalty' },
@@ -3615,7 +3873,7 @@
 
         if (preview.encounterBonus > 0) {
           const next = running + preview.encounterBonus;
-          steps.push({ cls:'bonus', icon:'◎', title:'Rundenziel', detail:'Encounter erfüllt', delta:preview.encounterBonus, before:running, after:next,
+          steps.push({ cls:'bonus', icon:'◎', iconKey:'target', title:'Rundenziel', detail:'Encounter erfüllt', delta:preview.encounterBonus, before:running, after:next,
             stageEyebrow:'ENCOUNTER', stageTitle:'Rundenziel erfüllt',
             stageFormula:[
               { label:'Vorher', value:running, kind:'bonus' },
@@ -3628,7 +3886,7 @@
 
         if (preview.retrigger > 0) {
           const next = running + preview.retrigger;
-          steps.push({ cls:'bonus', icon:'↻', title:'Retrigger', detail:'zusätzliche Wiederholung', delta:preview.retrigger, before:running, after:next,
+          steps.push({ cls:'bonus', icon:'↻', iconKey:'proc', title:'Retrigger', detail:'zusätzliche Wiederholung', delta:preview.retrigger, before:running, after:next,
             stageEyebrow:'RETRIGGER', stageTitle:'Retrigger',
             stageFormula:[
               { label:'Vorher', value:running, kind:'bonus' },
@@ -3641,7 +3899,7 @@
 
         if (preview.traitRetrigger > 0) {
           const next = running + preview.traitRetrigger;
-          steps.push({ cls:'bonus', icon:'✦', title:'Trait Echo', detail:'Trait-basierte Wiederholungen', delta:preview.traitRetrigger, before:running, after:next,
+          steps.push({ cls:'bonus', icon:'✦', iconKey:'proc', title:'Trait Echo', detail:'Trait-basierte Wiederholungen', delta:preview.traitRetrigger, before:running, after:next,
             stageEyebrow:'TRAIT', stageTitle:'Trait Echo',
             stageFormula:[
               { label:'Vorher', value:running, kind:'bonus' },
@@ -3654,7 +3912,7 @@
 
         if (preview.polishedFlat > 0) {
           const next = running + preview.polishedFlat;
-          steps.push({ cls:'add', icon:'▣', title:'Edition Bonus', detail:'Polished Edition', delta:preview.polishedFlat, before:running, after:next,
+          steps.push({ cls:'add', icon:'▣', iconKey:'chips', title:'Edition Bonus', detail:'Polished Edition', delta:preview.polishedFlat, before:running, after:next,
             stageEyebrow:'EDITION', stageTitle:'Polished Bonus',
             stageFormula:[
               { label:'Vorher', value:running, kind:'add' },
@@ -3667,7 +3925,7 @@
 
         (preview.engineSteps || []).forEach(step => {
           const next = Math.max(0, Math.round(running * step.factor));
-          steps.push({ cls: step.factor >= 1 ? 'mult' : 'penalty', icon:'×', title:step.label, detail:`Engine ${formatFactor(step.factor)}`, delta:next - running, before:running, after:next,
+          steps.push({ cls: step.factor >= 1 ? 'mult' : 'penalty', icon:'×', iconKey:'xmult', title:step.label, detail:`Engine ${formatFactor(step.factor)}`, delta:next - running, before:running, after:next,
             stageEyebrow:'ENGINE', stageTitle:step.label,
             stageFormula:[
               { label:'Vorher', value:running, kind:step.factor >= 1 ? 'mult' : 'penalty' },
@@ -3678,7 +3936,7 @@
           running = next;
         });
 
-        steps.push({ cls:'totalrow', icon:'Σ', title:'Gesamt', detail:'Endwert dieser Hand', delta:0, before:running, after:preview.total,
+        steps.push({ cls:'totalrow', icon:'Σ', iconKey:'chips', title:'Gesamt', detail:'Endwert dieser Hand', delta:0, before:running, after:preview.total,
           stageEyebrow:'HAND TOTAL', stageTitle:'Gesamtwert',
           stageFormula:[
             { label:'Endsumme', value:preview.total, kind:'result' }
@@ -4016,10 +4274,43 @@
         return result;
       }
 
+      function scoreRowMarkup(step, extraClass = "") {
+        const iconKey = step.iconKey || (step.cls === "signature" ? "signature" : step.cls === "mult" ? "xmult" : step.cls === "penalty" ? "boss" : step.cls === "bonus" ? "plusmult" : step.cls === "totalrow" ? "chips" : "chips");
+        return `<div class="sequence-row compact ${step.cls} ${extraClass}"><div class="sequence-icon">${gameIcon(iconKey)}</div><div><strong>${escapeHtml(step.title)}</strong><small>${escapeHtml(step.detail)}</small></div><div class="sequence-value"><b>${step.delta === 0 ? step.after.toLocaleString("de-DE") : `${step.delta > 0 ? "+" : ""}${step.delta.toLocaleString("de-DE")}`}</b><em>${escapeHtml(step.tag)}</em></div></div>`;
+      }
+
+      function renderScoreHistory(sequence, currentIndex) {
+        const rows = $("sequenceRows");
+        if (!rows) return;
+        const completed = sequence.slice(0, currentIndex);
+        const current = sequence[currentIndex];
+        const next = sequence[currentIndex + 1];
+        let markup = "";
+        const hiddenCount = Math.max(0, completed.length - 1);
+        if (hiddenCount > 0) {
+          const hiddenScore = completed.slice(0, -1).reduce((sum, step) => sum + Math.max(0, Number(step.delta || 0)), 0);
+          markup += `<div class="sequence-summary"><span>${hiddenCount} vorherige Schritte</span><b>+${hiddenScore.toLocaleString("de-DE")}</b></div>`;
+        }
+        const previous = completed.at(-1);
+        if (previous) markup += scoreRowMarkup(previous, "");
+        if (current) markup += scoreRowMarkup(current, "active");
+        if (next && !previous) markup += scoreRowMarkup(next, "next");
+        rows.innerHTML = markup;
+        $("sequenceStepLabel").textContent = `Schritt ${Math.min(currentIndex + 1, sequence.length)} / ${sequence.length}`;
+      }
+
+      function openScoreLedger() {
+        const ledger = lastScoreLedger || [];
+        const rows = ledger.length ? ledger.map(step => `<div class="detail-row"><div class="detail-row-icon">${gameIcon(step.iconKey || (step.cls === "mult" ? "xmult" : step.cls === "signature" ? "signature" : "chips"))}</div><div><strong>${escapeHtml(step.title)}</strong><small>${escapeHtml(step.detail)}</small></div><span>${step.delta === 0 ? step.after.toLocaleString("de-DE") : `${step.delta > 0 ? "+" : ""}${step.delta.toLocaleString("de-DE")}`}</span></div>`).join("") : `<div class="dialog-note">Noch keine Rechnung verfügbar.</div>`;
+        openDetail("Vollständige Rechnung", `<div class="detail-list">${rows}</div>`);
+      }
+
       async function runScoreAnimation(preview) {
         skipScoreAnimation = false;
         const reduced = settings.animation === 'off' || window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
         const sequence = aggregateSmallScoreSteps(buildScoreSequence(preview));
+        lastScoreLedger = sequence.map(step => ({ ...step }));
+        currentScoreStep = 0;
         const rows = $('sequenceRows');
         const total = $('sequenceTotal');
         const overlay = $('scoreSequence');
@@ -4047,6 +4338,7 @@
         setRoundProgressPreview(state.score, state.target);
         total.textContent = '0';
         rows.innerHTML = '';
+        renderScoreHistory(sequence, 0);
         overlay.classList.remove('hidden');
 
         for (let index = 0; index < preview.evals.length; index++) {
@@ -4095,17 +4387,13 @@
             playSound('proc');
             if (settings.haptics && navigator.vibrate) navigator.vibrate([25,20,55]);
           }
-          const row = document.createElement('div');
-          row.className = `sequence-row ${step.cls} ${step.impact ? 'impact' : ''}`;
-          row.innerHTML = `<div class="sequence-icon">${escapeHtml(step.icon)}</div><div><strong>${escapeHtml(step.title)}</strong><small>${escapeHtml(step.detail)}</small></div><div class="sequence-value"><b>${step.delta === 0 ? step.after.toLocaleString('de-DE') : `${step.delta > 0 ? '+' : ''}${step.delta.toLocaleString('de-DE')}`}</b><em>${escapeHtml(step.tag)}</em></div>`;
-          rows.appendChild(row);
-          row.classList.add('active');
-          row.scrollIntoView({ block:'nearest', behavior: reduced ? 'auto' : 'smooth' });
+          currentScoreStep = sequence.indexOf(step);
+          renderScoreHistory(sequence, currentScoreStep);
           if (step.impact) document.querySelector('.score-sequence-card')?.classList.add('big-impact');
           playSound(step.cls === 'penalty' ? 'sell' : ['mult','signature','totalrow'].includes(step.cls) ? 'boss' : 'score');
           await countElementTo(total, displayedTotal, step.after, step.cls === 'totalrow' ? 360 * speed : 280 * speed);
           displayedTotal = step.after;
-          row.classList.remove('active');
+          renderScoreHistory(sequence, Math.min(sequence.length - 1, currentScoreStep));
           document.querySelector('.score-sequence-card')?.classList.remove('big-impact');
           document.querySelectorAll('.die-wrap.proc-lit').forEach(wrap => wrap.classList.remove('proc-lit'));
           await delay((step.cls === 'signature' || step.impact ? 320 : 170) * speed);
@@ -4126,8 +4414,28 @@
           if (preview.perfectFlow || preview.signature) await delay(380 * speed);
         }
 
+        renderScoreHistory(sequence, sequence.length - 1);
+        $("sequenceStepLabel").textContent = `Fertig · ${sequence.length} Schritte`;
         await delay((settings.animation === 'juicy' ? 900 : 520) * (reduced ? .12 : 1));
         overlay.classList.add('hidden');
+      }
+
+      function recordScoreTelemetry(preview) {
+        const stats = state.stats;
+        const steps = buildScoreSequence(preview);
+        steps.forEach(step => {
+          let key = "Other";
+          if (/^G\d/.test(step.title)) key = "Group Base";
+          else if (step.cls === "signature") key = step.title;
+          else if (step.title === "Perfect Flow") key = "Perfect Flow";
+          else if (step.cls === "mult") key = step.title;
+          else if (step.cls === "bonus") key = "Support / Proc";
+          const amount = Math.max(0, Number(step.delta || 0));
+          stats.sourceTotals[key] = (stats.sourceTotals[key] || 0) + amount;
+        });
+        stats.handTargetRatios.push(Number((preview.total / Math.max(1, state.target)).toFixed(4)));
+        if (stats.handTargetRatios.length > 250) stats.handTargetRatios.shift();
+        if (!stats.buildOnlineRound && preview.engineSteps?.length && preview.total >= state.target * .75) stats.buildOnlineRound = state.round;
       }
 
       async function scoreHand() {
@@ -4144,6 +4452,7 @@
 
         state.stats.hands++;
         state.stats.totalScore += preview.total;
+        recordScoreTelemetry(preview);
         state.stats.roundHands[state.round] = (state.stats.roundHands[state.round] || 0) + 1;
         state.stats.roundScores[state.round] = (state.stats.roundScores[state.round] || 0) + preview.total;
         state.stats.roundTargets[state.round] = state.target;
@@ -4380,6 +4689,8 @@
         state.stats.dividendsEarned += dividends + frozenIncome;
         state.stats.bondEarned += bonds;
         if (hasMod("venture") && interest > 0) state.ventureStacks++;
+        state.stats.roundWinTurns[state.round] = state.turnsLeft;
+        state.stats.roundOverfill[state.round] = Number((state.score / Math.max(1, state.target)).toFixed(4));
         state.lastEconomy = { base:baseReward, interest, dividends, bonds, frozen:frozenIncome, total:totalReward };
         state.lastRoundWasBoss = Boolean(state.boss);
         queueNextBossPreview();
@@ -4683,6 +4994,8 @@
           applyItem(offer.id);
         }
 
+        if (!state.stats.firstEngineRound && offer.kind === "mod" && ["xmult","scaling"].includes(scoreAxisForOffer(offer))) state.stats.firstEngineRound = state.round;
+        if (!state.stats.firstXMultRound && scoreAxisForOffer(offer) === "xmult") state.stats.firstXMultRound = state.round;
         vibrate(24);
         playSound("buy");
         showToast(`${grantedName} gekauft`);
@@ -4732,7 +5045,7 @@
 
       function grantPackChoice(offer) {
         if (!offer) return;
-        if (offer.kind === "mod") { if (hasMod(offer.id)) state.stats.upgrades++; addOrUpgradeMod(MODS.find(mod => mod.id === offer.id), offer.edition); }
+        if (offer.kind === "mod") { if (hasMod(offer.id)) state.stats.upgrades++; addOrUpgradeMod(MODS.find(mod => mod.id === offer.id), offer.edition); if (!state.stats.firstEngineRound && ["xmult","scaling"].includes(scoreAxisForOffer(offer))) state.stats.firstEngineRound = state.round; if (!state.stats.firstXMultRound && scoreAxisForOffer(offer) === "xmult") state.stats.firstXMultRound = state.round; }
         if (offer.kind === "chip") { if (getChip(offer.id)) state.stats.upgrades++; addOrUpgradeChip(MICROCHIPS.find(chip => chip.id === offer.id)); }
         if (offer.kind === "die") state.dice.push(createDie(offer.id));
         state.pendingPack = null;
@@ -4772,7 +5085,7 @@
             const rarity = rarityData(offer.rarity);
             const edition = offer.edition ? ` · ${EDITIONS[offer.edition].label}` : "";
             card.classList.add("revealed");
-            card.innerHTML = `<div class="pack-face"><div class="pack-icon">${escapeHtml(offer.icon)}</div><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span><strong>${escapeHtml(offer.name)}</strong><small>${escapeHtml(offer.desc)}${edition}</small><button type="button" data-pack-choice="${escapeHtml(offer.uid)}" disabled>WÄHLEN</button></div>`;
+            card.innerHTML = `<div class="pack-face"><div class="pack-icon">${gameIcon(offerIconKey(offer))}</div><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span><strong>${escapeHtml(offer.name)}</strong><small>${escapeHtml(offer.desc)}${edition}</small><button type="button" data-pack-choice="${escapeHtml(offer.uid)}" disabled>WÄHLEN</button></div>`;
             playSound(raritySound(offer.rarity));
             vibrate(offer.rarity === "experimental" ? 45 : offer.rarity === "rare" ? 24 : 10);
             if (offer.rarity === "experimental") showLegendaryMoment(offer);
@@ -5293,14 +5606,16 @@
         updateMetaUI();
         $("introScreen").classList.toggle("hidden", state.phase !== "intro");
         $("tutorialScreen").classList.toggle("hidden", state.phase !== "tutorial");
-        $("gameScreen").classList.toggle("hidden", state.phase !== "play");
+        const runSurfaceVisible = ["play","shop","reward","path"].includes(state.phase);
+        $("gameScreen").classList.toggle("hidden", !runSurfaceVisible);
         $("shopScreen").classList.toggle("hidden", state.phase !== "shop");
         $("rewardScreen").classList.toggle("hidden", state.phase !== "reward");
         $("pathScreen").classList.toggle("hidden", state.phase !== "path");
         $("endScreen").classList.toggle("hidden", !["gameover","victory"].includes(state.phase));
 
+        document.body.classList.toggle("overlay-active", ["shop","reward","path"].includes(state.phase));
         if (state.phase === "tutorial") renderTutorial();
-        if (state.phase === "play") renderGame();
+        if (["play","shop","reward","path"].includes(state.phase)) renderGame();
         if (state.phase === "shop") renderShop();
         if (state.phase === "reward") renderBossRewards();
         if (state.phase === "path") renderPathChoices();
@@ -5317,7 +5632,7 @@
           const button = document.createElement("button");
           button.type = "button";
           button.className = `reward-card path-card rarity-${path.rarity}`;
-          button.innerHTML = `<span class="reward-icon">${escapeHtml(path.icon)}</span><span><span class="rarity-badge rarity-${path.rarity}">${rarity.symbol} ${rarity.label}</span><h3>${escapeHtml(path.name)}</h3><p>${escapeHtml(path.desc)}</p></span><b>›</b>`;
+          button.innerHTML = `<span class="reward-icon">${gameIcon(pathIconKey(path.id))}</span><span><span class="rarity-badge rarity-${path.rarity}">${rarity.symbol} ${rarity.label}</span><h3>${escapeHtml(path.name)}</h3><p>${escapeHtml(path.desc)}</p></span><b>›</b>`;
           button.addEventListener("click", () => choosePath(path.id));
           container.appendChild(button);
         });
@@ -5331,7 +5646,7 @@
           const button = document.createElement("button");
           button.type = "button";
           button.className = `reward-card rarity-${reward.rarity}`;
-          button.innerHTML = `<span class="reward-icon">${reward.icon}</span><span><span class="rarity-badge rarity-${reward.rarity}">${rarity.symbol} ${rarity.label}</span><h3>${reward.name}</h3><p>${reward.desc}</p></span><b>›</b>`;
+          button.innerHTML = `<span class="reward-icon">${gameIcon(rewardIconKey(reward.id))}</span><span><span class="rarity-badge rarity-${reward.rarity}">${rarity.symbol} ${rarity.label}</span><h3>${escapeHtml(reward.name)}</h3><p>${escapeHtml(reward.desc)}</p></span><b>›</b>`;
           button.addEventListener("click", () => chooseBossReward(reward.id));
           container.appendChild(button);
         });
@@ -5339,29 +5654,84 @@
 
       function getNearComboHint() {
         if (!state.turnRolled) return null;
-        const values = state.dice.map(die => die.value).filter(Number.isFinite);
-        if (values.length < 3) return null;
-        const counts = Object.values(values.reduce((map, value) => { map[value] = (map[value] || 0) + 1; return map; }, {})).sort((a,b) => b-a);
-        const maxCount = counts[0] || 0;
-        if (maxCount === 4) return { icon:"5K", title:"Five Kind", text:"1 gleicher Wert fehlt" };
-        if (maxCount === 3) return { icon:"≣", title:"Four Kind", text:"1 gleicher Wert fehlt" };
-        if (counts[0] === 2 && counts[1] === 2) return { icon:"⌂", title:"Full House", text:"1 Treffer entfernt" };
+        const dice = state.dice.filter(die => Number.isFinite(die.value));
+        if (dice.length < 3) return null;
+        const identities = detectBuildIdentity();
+        const familyBoost = { Pair:"pair", Sequence:"straight", Target:"target", Parity:"parity", Power:"high" };
+        const preferred = identities.map(identity => familyBoost[identity]).filter(Boolean);
+        const candidates = [];
+        const add = candidate => {
+          const family = comboFamily(candidate.type);
+          candidate.score += preferred[0] === family ? 30 : preferred[1] === family ? 16 : 0;
+          candidates.push(candidate);
+        };
 
-        const unique = [...new Set(values)].sort((a,b) => a-b);
-        for (let start = Math.min(...unique) - 1; start <= Math.max(...unique); start++) {
+        const byValue = {};
+        dice.forEach(die => (byValue[die.value] ||= []).push(die));
+        const entries = Object.entries(byValue).sort((a,b) => b[1].length - a[1].length);
+        const [topValue, topDice = []] = entries[0] || [];
+        if (topDice.length === 4) add({ type:"five_kind", iconKey:"five", title:"Five Kind", text:"1 gleicher Wert fehlt", score:100, focusIds:topDice.map(d=>d.id), changeIds:dice.filter(d=>String(d.value)!==String(topValue)).map(d=>d.id) });
+        if (topDice.length === 3) add({ type:"four_kind", iconKey:"four", title:"Four Kind", text:"1 gleicher Wert fehlt", score:82, focusIds:topDice.map(d=>d.id), changeIds:dice.filter(d=>String(d.value)!==String(topValue)).map(d=>d.id) });
+        if ((entries[0]?.[1].length || 0) === 2 && (entries[1]?.[1].length || 0) === 2) {
+          const focus = [...entries[0][1], ...entries[1][1]].map(d=>d.id);
+          add({ type:"triple", iconKey:"signature", title:"Full House", text:"1 Treffer entfernt", score:88, focusIds:focus, changeIds:dice.filter(d=>!focus.includes(d.id)).map(d=>d.id) });
+        }
+
+        const unique = [...new Set(dice.map(d=>d.value))].sort((a,b)=>a-b);
+        for (let start = Math.min(...unique)-1; start <= Math.max(...unique); start++) {
           const window5 = [start,start+1,start+2,start+3,start+4];
-          const present = window5.filter(value => unique.includes(value)).length;
-          if (present === 4) return { icon:"↗↗", title:"Grand Straight", text:"1 Zahl fehlt" };
+          const present = window5.filter(value=>unique.includes(value));
+          if (present.length === 4) {
+            const focus = dice.filter(d=>window5.includes(d.value)).map(d=>d.id);
+            add({ type:"grand_straight", iconKey:"sequence", title:"Grand Straight", text:`fehlt: ${window5.find(v=>!unique.includes(v))}`, score:96, focusIds:focus, changeIds:dice.filter(d=>!focus.includes(d.id)).map(d=>d.id) });
+          }
         }
-        for (let start = Math.min(...unique) - 1; start <= Math.max(...unique); start++) {
+        for (let start = Math.min(...unique)-1; start <= Math.max(...unique); start++) {
           const window4 = [start,start+1,start+2,start+3];
-          const present = window4.filter(value => unique.includes(value)).length;
-          if (present === 3) return { icon:"⇈", title:"Straight 4", text:"1 Zahl fehlt" };
+          const present = window4.filter(value=>unique.includes(value));
+          if (present.length === 3) {
+            const focus = dice.filter(d=>window4.includes(d.value)).map(d=>d.id);
+            add({ type:"straight4", iconKey:"sequence", title:"Straight 4", text:`fehlt: ${window4.find(v=>!unique.includes(v))}`, score:72, focusIds:focus, changeIds:dice.filter(d=>!focus.includes(d.id)).map(d=>d.id) });
+          }
         }
-        const even = values.filter(value => value % 2 === 0).length;
-        const odd = values.filter(value => Math.abs(value % 2) === 1).length;
-        if (Math.max(even, odd) === 4) return { icon:"◉", title:"Grand Parity", text:"1 passender Wert fehlt" };
-        return null;
+        const evenDice = dice.filter(d=>d.value % 2 === 0);
+        const oddDice = dice.filter(d=>Math.abs(d.value % 2) === 1);
+        const parityDice = evenDice.length >= oddDice.length ? evenDice : oddDice;
+        if (parityDice.length === 4) add({ type:"grand_parity", iconKey:"parity", title:"Grand Parity", text:"1 passender Wert fehlt", score:76, focusIds:parityDice.map(d=>d.id), changeIds:dice.filter(d=>!parityDice.includes(d)).map(d=>d.id) });
+
+        candidates.sort((a,b)=>b.score-a.score);
+        return candidates[0] || null;
+      }
+
+      function buildCompassData() {
+        const identities = detectBuildIdentity();
+        const primary = identities[0] || "Sequence";
+        const secondary = identities[1] || "Pair";
+        const main = BUILD_GUIDE[primary] || BUILD_GUIDE.Sequence;
+        const alt = BUILD_GUIDE[secondary] || BUILD_GUIDE.Pair;
+        const near = getNearComboHint();
+        const currentScaling = currentScalingEngine();
+        const highestProgram = PROGRAMS.slice().sort((a,b)=>comboLevel(b.id)-comboLevel(a.id))[0];
+        return { primary, secondary, main, alt, near, currentScaling, highestProgram };
+      }
+
+      function openBuildCompass() {
+        const data = buildCompassData();
+        const goalIcon = name => {
+          if (/kind|house|pair/i.test(name)) return "pair";
+          if (/straight|sequence/i.test(name)) return "sequence";
+          if (/parity/i.test(name)) return "parity";
+          if (/maximum|power|high/i.test(name)) return "power";
+          if (/exact|target/i.test(name)) return "target";
+          if (/flow|split/i.test(name)) return "flow";
+          return "signature";
+        };
+        const goals = [...data.main.goals.slice(0,3), ...data.alt.goals.slice(0,1)].map(goal => `<div class="compass-goal">${gameIcon(goalIcon(goal))}<span>${escapeHtml(goal)}</span></div>`).join("");
+        const near = data.near ? `<div class="compass-goal compass-now">${gameIcon(data.near.iconKey)}<span><b>JETZT</b><br>${escapeHtml(data.near.title)} · ${escapeHtml(data.near.text)}</span></div>` : `<div class="compass-goal compass-now">${gameIcon("flow")}<span><b>JETZT</b><br>Baue zwei unterschiedliche echte Gruppen.</span></div>`;
+        const scaling = data.currentScaling ? `${escapeHtml(data.currentScaling.name)} L${data.currentScaling.level}` : "noch frei";
+        const program = data.highestProgram ? `${escapeHtml(data.highestProgram.name)} L${comboLevel(data.highestProgram.id)}` : "keines";
+        openDetail("Build Compass", `<div class="build-compass-head"><div class="build-compass-icon">${gameIcon(data.main.icon)}</div><div><span>Dein Build</span><strong>${escapeHtml(data.primary)} + ${escapeHtml(data.secondary)}</strong><small>Scaling: ${scaling} · Top Lab: ${program}</small></div></div><div class="compass-section"><h3>Beste Ziele</h3><div class="compass-goals">${goals}${near}</div></div><div class="dialog-note">Die Empfehlung priorisiert deinen Build und zeigt nur ein aktuelles Ziel. Sie löst den Zug nicht automatisch.</div><button id="compassModsBtn" class="utility-btn" style="width:100%">BUILD DETAILS</button>`);
+        $("compassModsBtn").addEventListener("click", () => { $("detailDialog").close(); openModsDetail(); });
       }
 
       function renderGame() {
@@ -5378,7 +5748,7 @@
         $("bossStatusBtn").classList.toggle("hidden", !state.boss);
         if (state.boss) {
           $("bossShort").textContent = state.boss.name;
-          $("bossStatusBtn").querySelector(".status-icon").textContent = state.boss.icon || "⚠";
+          $("bossStatusBtn").querySelector(".status-icon").innerHTML = gameIcon("boss");
         }
 
         const showEncounter = state.encounter && !["score", "boss"].includes(state.encounter.id);
@@ -5386,24 +5756,28 @@
         const challengeMet = showEncounter ? preview.encounterMet : preview.contractMet;
         $("contractStatusBtn").classList.toggle("hidden", !challenge);
         if (challenge) {
-          $("contractIcon").textContent = challenge.icon || "◎";
+          $("contractIcon").innerHTML = gameIcon(showEncounter ? "target" : "signature");
           $("contractShort").textContent = challenge.name;
           $("contractDot").className = `status-dot ${challengeMet ? "met" : ""}`;
           $("contractStatusBtn").setAttribute("aria-label", `${challenge.name}: ${challengeMet ? "erfüllt" : "offen"}`);
         }
 
-        const identity = detectBuildIdentity()[0];
-        $("buildShort").textContent = `${coreModCount()}/${state.modSlots}${identity ? ` · ${identity.slice(0,4).toUpperCase()}` : ""}`;
+        const identities = detectBuildIdentity();
+        const identity = identities[0];
+        const guide = BUILD_GUIDE[identity] || BUILD_GUIDE.Sequence;
+        $("buildStatusBtn").querySelector(".status-icon").innerHTML = gameIcon(guide.icon);
+        $("buildShort").textContent = identity ? `${identity.toUpperCase()} · ${coreModCount()}/${state.modSlots}` : `${coreModCount()}/${state.modSlots} CORE`;
+        $("programStatusBtn").querySelector(".status-icon").innerHTML = gameIcon("program");
         const upgradedPrograms = PROGRAMS.filter(program => comboLevel(program.id) > 1);
         const highestProgram = Math.max(1, ...PROGRAMS.map(program => comboLevel(program.id)));
         $("programShort").textContent = `L${highestProgram}${upgradedPrograms.length ? ` · ${upgradedPrograms.length}` : ""}`;
 
-        renderDice();
+        const nearHint = getNearComboHint();
+        renderDice(nearHint);
         renderGroupPicker();
         renderGroups(preview);
-        const nearHint = getNearComboHint();
         $("comboHint").classList.toggle("hidden", !nearHint);
-        $("comboHint").innerHTML = nearHint ? `<span class="hint-icon">${escapeHtml(nearHint.icon)}</span><strong>${escapeHtml(nearHint.title)}</strong><span>${escapeHtml(nearHint.text)}</span>` : "";
+        $("comboHint").innerHTML = nearHint ? `<span class="hint-icon">${gameIcon(nearHint.iconKey)}</span><strong>${escapeHtml(nearHint.title)}</strong><span>${escapeHtml(nearHint.text)}</span>` : "";
 
         const maxTurnSlots = state.encounter?.id === "survival" ? 4 : Math.max(4, state.turnsLeft, 3);
         const maxRerollSlots = Math.max(4, baseRerolls() + state.nextRound.rerolls, state.rerolls, 2);
@@ -5417,6 +5791,7 @@
         $("pulseBtn").classList.toggle("used", !state.pulseAvailable);
         $("pulseBtn").disabled = !state.turnRolled || !state.pulseAvailable || state.isRolling || state.isScoring;
 
+        $("flowStrip").querySelector(".flow-icon").innerHTML = gameIcon("flow");
         $("flowLabel").textContent = preview.perfectFlow ? "×1,50" : `×${preview.maxFlow.toFixed(2).replace(".", ",")}`;
         const flags = [];
         if (preview.perfectFlow) flags.push("PERFECT");
@@ -5432,14 +5807,15 @@
         $("gameScreen").classList.toggle("pre-roll", !state.turnRolled);
       }
 
-      function renderDice() {
+      function renderDice(nearHint = null) {
         const grid = $("diceGrid");
         grid.innerHTML = "";
 
         state.dice.forEach(die => {
           const data = DIE_TYPES[die.type];
           const wrap = document.createElement("div");
-          wrap.className = `die-wrap type-${die.type} ${die.held ? "held" : ""} ${die.frozen ? "frozen" : ""} ${data.rarity === "rare" ? "rare" : ""}`;
+          const hintClass = nearHint?.focusIds?.includes(die.id) ? "hint-focus" : nearHint?.changeIds?.includes(die.id) ? "hint-change" : "";
+          wrap.className = `die-wrap type-${die.type} ${die.held ? "held" : ""} ${die.frozen ? "frozen" : ""} ${data.rarity === "rare" ? "rare" : ""} ${hintClass}`;
           wrap.dataset.dieId = die.id;
 
           const groupBadge = document.createElement("div");
@@ -5545,6 +5921,27 @@
         return null;
       }
 
+      function offerSynergyEvidence(offer) {
+        const tags = offerSynergyTags(offer);
+        const build = detectBuildIdentity();
+        const evidence = [];
+        tags.forEach(tag => {
+          if (build.includes(tag)) evidence.push(`${tag} ist Teil deines aktuellen Builds`);
+          const familyMap = { Pair:"pair", Sequence:"straight", Target:"target", Parity:"parity", Power:"high" };
+          const family = familyMap[tag];
+          if (family && comboLevel(family) > 1) evidence.push(`${tag} Lab L${comboLevel(family)}`);
+        });
+        if (offer.kind === "mod" && getMod(offer.id)) evidence.push(`${offer.name} wird aufgewertet`);
+        if (offer.kind === "program") evidence.push(`direktes Programm-Upgrade`);
+        if (!evidence.length) evidence.push("Utility oder neue Build-Richtung");
+        return [...new Set(evidence)].slice(0,3);
+      }
+
+      function openOfferSynergyDetail(offer) {
+        const evidence = offerSynergyEvidence(offer);
+        openDetail("Warum passt das?", `<div class="build-compass-head"><div class="build-compass-icon">${gameIcon(scoreAxisForOffer(offer) === "xmult" ? "xmult" : scoreAxisForOffer(offer) === "proc" ? "proc" : "chips")}</div><div><span>${escapeHtml(synergyDots(offer))}</span><strong>${escapeHtml(offer.name)}</strong><small>${escapeHtml(compactOfferDescription(offer))}</small></div></div><div class="detail-list">${evidence.map((text,index)=>`<div class="detail-row"><div class="detail-row-icon">${index+1}</div><div><strong>Synergiepunkt</strong><small>${escapeHtml(text)}</small></div><span>●</span></div>`).join("")}</div>`);
+      }
+
       function queueNextBossPreview() {
         state.queuedBoss = (state.round + 1) % 3 === 0 ? chooseBossForRound(state.round + 1) : null;
       }
@@ -5612,8 +6009,7 @@
           info.className = "combo-info";
           const levelText = isQualified(result) && result.level > 1 ? ` L${result.level}` : "";
           const flowText = result.flowFactor > 1 ? ` ×${result.flowFactor.toFixed(2).replace(".", ",")}` : "";
-          const icon = COMBO_ICONS[result.type] || "·";
-          info.innerHTML = `<div class="combo-name">${escapeHtml(icon)} ${escapeHtml(result.name)}${levelText}${flowText}</div><div class="combo-score">${(result.scoredTotal ?? result.total).toLocaleString("de-DE")}</div>`;
+          info.innerHTML = `<div class="combo-name">${gameIcon(comboIconKey(result.type))}${escapeHtml(result.name)}${levelText}${flowText}</div><div class="combo-score">${(result.scoredTotal ?? result.total).toLocaleString("de-DE")}</div>`;
 
           const detail = document.createElement("div");
           detail.className = "group-detail";
@@ -5649,8 +6045,8 @@
         $("shopEconomy").innerHTML = `<strong>+${economy.total} ●</strong><span>Basis ${economy.base} · Zins ${economy.interest}/${interestCap()} · Extras ${(economy.dividends || 0) + (economy.bonds || 0) + (economy.frozen || 0)}</span>`;
         const scaling = currentScalingEngine();
         $("scalingSlot").innerHTML = scaling
-          ? `<span>∞</span><strong>${escapeHtml(scaling.name)} L${scaling.level}${state.scalingAmplifier ? ` · +${Math.round(state.scalingAmplifier * 100)} %` : ""}</strong>`
-          : `<span>∞</span><strong>Scaling Slot frei</strong>`;
+          ? `<span>${gameIcon("scaling")}</span><strong>${escapeHtml(scaling.name)} L${scaling.level}${state.scalingAmplifier ? ` · +${Math.round(state.scalingAmplifier * 100)} %` : ""}</strong>`
+          : `<span>${gameIcon("scaling")}</span><strong>Scaling Slot frei</strong>`;
 
         const container = $("shopOffers");
         container.innerHTML = "";
@@ -5664,7 +6060,7 @@
           card.className = `offer kind-${offer.kind} rarity-${rarity.id} axis-${scoreAxis} ${offer.edition ? `edition-${offer.edition}` : ""} ${offer.purchased ? "purchased" : ""}`;
 
           const icon = document.createElement("button");
-          icon.className = "offer-icon"; icon.type = "button"; icon.textContent = offer.icon;
+          icon.className = "offer-icon"; icon.type = "button"; icon.innerHTML = gameIcon(offerIconKey(offer));
           icon.setAttribute("aria-label", `Details zu ${offer.name}`); icon.addEventListener("click", () => openOfferDetails(offer));
 
           const text = document.createElement("div");
@@ -5674,7 +6070,8 @@
           const capacityHint = offer.kind === "mod" && !existingMod && offer.edition !== "compact" && coreModCount() >= state.modSlots ? " · ersetzt Core" : offer.kind === "chip" && !existingChip && state.microchips.length >= 3 ? " · ersetzt Chip" : offer.kind === "die" && state.dice.length >= 7 ? " · ersetzt Würfel" : "";
           const editionBadge = offer.edition ? `<span class="edition-badge">${EDITIONS[offer.edition].symbol} ${EDITIONS[offer.edition].label}</span>` : "";
           const synergy = synergyDots(offer);
-          text.innerHTML = `<div class="offer-meta"><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span>${editionBadge}<span class="scale-badge scale-${scoreAxis}">${scoreAxisLabel(scoreAxis)}</span><span class="rarity-badge rarity-common">${labels[offer.kind] || offer.kind}${capacityHint}</span></div><h3>${escapeHtml(offer.name)}</h3><p>${escapeHtml(compactOfferDescription(offer))}</p><div class="synergy-badge">${escapeHtml(synergy)}</div>`;
+          text.innerHTML = `<div class="offer-meta"><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span>${editionBadge}<span class="scale-badge scale-${scoreAxis}">${scoreAxisLabel(scoreAxis)}</span><span class="rarity-badge rarity-common">${labels[offer.kind] || offer.kind}${capacityHint}</span></div><h3>${escapeHtml(offer.name)}</h3><p>${escapeHtml(compactOfferDescription(offer))}</p><button class="synergy-badge synergy-button" type="button">${escapeHtml(synergy)}</button>`;
+          text.querySelector(".synergy-button").addEventListener("click", event => { event.stopPropagation(); openOfferSynergyDetail(offer); });
 
           const buy = document.createElement("button");
           buy.className = "buy-btn"; buy.type = "button"; buy.disabled = offer.purchased || state.coins < offer.price;
@@ -5784,16 +6181,16 @@
           const level = comboLevel(program.id);
           const disabled = isComboDisabled(program.id);
           return `<div class="detail-row">
-            <div class="detail-row-icon">${escapeHtml(program.icon)}</div>
+            <div class="detail-row-icon">${gameIcon(programIconKey(program.id))}</div>
             <div><strong>${escapeHtml(program.name)} · L${level}</strong><small>${escapeHtml(program.desc)}<br>L4: ${escapeHtml(program.l4)}<br>L5: ${escapeHtml(program.l5)}${disabled ? " Im aktuellen Bosskampf deaktiviert." : ""}</small></div>
             <span>${disabled ? "×" : `L${level}`}</span>
           </div>`;
         }).join("");
         const ladder = `<h3>Combo Ladder</h3><div class="detail-list">
-          <div class="detail-row"><div class="detail-row-icon">=</div><div><strong>Basic</strong><small>Pair · Exact 10 · Parity Trio</small></div><span>SETUP</span></div>
-          <div class="detail-row"><div class="detail-row-icon">↗</div><div><strong>Strong</strong><small>Triple · Straight 3 · Power Trio</small></div><span>MID</span></div>
-          <div class="detail-row"><div class="detail-row-icon">⇈</div><div><strong>Premium</strong><small>Four Kind · Straight 4 · Parity 4</small></div><span>HIGH</span></div>
-          <div class="detail-row"><div class="detail-row-icon">★</div><div><strong>Signature</strong><small>Five Kind · Grand Straight · Grand Parity · Full House</small></div><span>JACKPOT</span></div>
+          <div class="detail-row"><div class="detail-row-icon">${gameIcon("pair")}</div><div><strong>Basic</strong><small>Pair · Exact 10 · Parity Trio</small></div><span>SETUP</span></div>
+          <div class="detail-row"><div class="detail-row-icon">${gameIcon("sequence")}</div><div><strong>Strong</strong><small>Triple · Straight 3 · Power Trio</small></div><span>MID</span></div>
+          <div class="detail-row"><div class="detail-row-icon">${gameIcon("four")}</div><div><strong>Premium</strong><small>Four Kind · Straight 4 · Parity 4</small></div><span>HIGH</span></div>
+          <div class="detail-row"><div class="detail-row-icon">${gameIcon("signature")}</div><div><strong>Signature</strong><small>Five Kind · Grand Straight · Grand Parity · Full House</small></div><span>JACKPOT</span></div>
         </div>`;
         openDetail("Kombinationsprogramme", `<div class="detail-list">${rows}</div>${ladder}`);
       }
@@ -6063,8 +6460,8 @@
       function runReportData() {
         const avg = state.stats.hands ? Math.round(state.stats.totalScore / state.stats.hands) : 0;
         return {
-          schemaVersion:3,
-          gameVersion:"1.6",
+          schemaVersion:4,
+          gameVersion:"1.7",
           date:new Date().toISOString(),
           durationSeconds:state.runStartedAt ? Math.round((Date.now() - state.runStartedAt) / 1000) : null,
           startSet:state.startSet,
@@ -6099,6 +6496,8 @@
           `Build: ${data.build.join(" + ") || "Hybrid"}`,
           `Beste Hand: ${data.bestHand} · Ø Hand: ${data.averageHand} · Perfect Flows: ${data.perfectFlows}`,
           `Coins verdient/ausgegeben: ${data.stats.coinsEarned}/${data.stats.coinsSpent}`,
+          `Build online: Runde ${data.stats.buildOnlineRound || "–"} · Erste Engine: Runde ${data.stats.firstEngineRound || "–"} · Erste ×Mult: Runde ${data.stats.firstXMultRound || "–"}`,
+          `Score-Quellen: ${Object.entries(data.stats.sourceTotals || {}).sort((a,b)=>b[1]-a[1]).map(([key,value]) => `${key} ${Math.round(value)}`).join(" · ") || "keine"}`,
           `Kombos: ${Object.entries(data.stats.comboCounts).map(([key,value]) => `${COMBO_NAMES[key] || key} ${value}`).join(" · ")}`,
           `Bosses: ${Object.entries(data.bossesSeen || {}).map(([key,value]) => `${BOSSES.find(b => b.id === key)?.name || key} ${value}`).join(" · ") || "keine"}`,
           `Mods: ${data.mods.map(mod => `${mod.name} L${mod.level}`).join(" · ") || "keine"}`
@@ -6111,7 +6510,7 @@
         const blob = new Blob([body], { type:format === "json" ? "application/json" : "text/plain" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `SET5_Run_v09_${Date.now()}.${format}`;
+        link.download = `SET5_Run_v17_${Date.now()}.${format}`;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -6123,7 +6522,7 @@
         const textBody = reportText(data);
         try {
           if (navigator.share) {
-            const file = new File([JSON.stringify(data, null, 2)], `SET5_Run_v09_${Date.now()}.json`, { type:"application/json" });
+            const file = new File([JSON.stringify(data, null, 2)], `SET5_Run_v17_${Date.now()}.json`, { type:"application/json" });
             const payload = { title:"SET/5 Run Report", text:textBody };
             if (navigator.canShare?.({ files:[file] })) payload.files = [file];
             await navigator.share(payload);
@@ -6147,7 +6546,15 @@
         const bars = comboEntries.map(([type,count]) => `<div class="report-bar"><span>${escapeHtml(COMBO_NAMES[type] || type)}</span><div class="report-track"><div class="report-fill" style="width:${Math.round(count / maxCombo * 100)}%"></div></div><b>${count}</b></div>`).join("");
         const coreList = state.mods.length ? state.mods.map(mod => `${rarityData(mod.rarity).symbol} ${mod.name} L${mod.level}${mod.edition ? ` ${EDITIONS[mod.edition].symbol}` : ""}`).join(" · ") : "Keine Core Mods";
         const startSetName = START_SETS[state.startSet]?.name || "Standard";
-        openDetail("Run Report", `<div class="dialog-note"><span class="build-identity">BUILD · ${escapeHtml(identities.join(" + ") || "Hybrid")}</span><br><br>Startset ${escapeHtml(startSetName)} · ${state.roundsWon} Runden gewonnen · +${state.dataEarned} Data</div><div class="report-summary"><div class="report-metric"><strong>${stats.hands}</strong><span>Hände</span></div><div class="report-metric"><strong>${avg.toLocaleString("de-DE")}</strong><span>Ø Hand</span></div><div class="report-metric"><strong>${stats.coinsEarned}</strong><span>Coins verdient</span></div><div class="report-metric"><strong>${stats.coinsSpent}</strong><span>Coins ausgegeben</span></div><div class="report-metric"><strong>${stats.interestEarned + stats.bondEarned}</strong><span>Zins + Bonds</span></div><div class="report-metric"><strong>${stats.refreshes}</strong><span>Refreshes</span></div><div class="report-metric"><strong>${stats.upgrades}</strong><span>Upgrades</span></div></div><h3>Kombinationen</h3><div class="report-bars">${bars}</div><h3>Signature Hands</h3><p>Full House ${stats.signatureCounts?.full_house || 0} · Perfect Split ${stats.signatureCounts?.perfect_split || 0} · Double Exact ${stats.signatureCounts?.double_exact || 0}</p><h3>Bosses</h3><p>${Object.entries(stats.bossesSeen || {}).map(([id,count]) => `${escapeHtml(BOSSES.find(b => b.id === id)?.name || id)} ×${count}`).join(" · ") || "Keine"}</p><h3>Ökonomie</h3><p>Zinsen ${stats.interestEarned} · Dividenden ${stats.dividendsEarned} · Bonds ${stats.bondEarned} · Verkäufe ${stats.salesCoins} · Goldwürfel ${stats.goldCoins}</p><h3>Core Build</h3><p>${escapeHtml(coreList)}</p><div class="report-actions"><button id="exportReportTextBtn" class="utility-btn">TXT</button><button id="exportReportJsonBtn" class="utility-btn">JSON</button><button id="shareReportBtn" class="utility-btn">REPORT TEILEN</button><button id="shareSeedBtn" class="utility-btn">SEED TEILEN</button></div>`);
+        const ratios = stats.handTargetRatios || [];
+        const avgRatio = ratios.length ? ratios.reduce((a,b)=>a+b,0)/ratios.length : 0;
+        const maxRatio = ratios.length ? Math.max(...ratios) : 0;
+        const winTurns = Object.values(stats.roundWinTurns || {});
+        const avgTurns = winTurns.length ? winTurns.reduce((a,b)=>a+b,0)/winTurns.length : 0;
+        const sources = Object.entries(stats.sourceTotals || {}).sort((a,b)=>b[1]-a[1]);
+        const sourceTotal = Math.max(1, sources.reduce((sum,[,value])=>sum+value,0));
+        const sourceBars = sources.slice(0,8).map(([name,value])=>`<div class="report-bar"><span>${escapeHtml(name)}</span><div class="report-track"><div class="report-fill" style="width:${Math.round(value/sourceTotal*100)}%"></div></div><b>${Math.round(value/sourceTotal*100)}%</b></div>`).join("") || `<div class="dialog-note">Noch keine Quellenanalyse.</div>`;
+        openDetail("Run Report", `<div class="dialog-note"><span class="build-identity">BUILD · ${escapeHtml(identities.join(" + ") || "Hybrid")}</span><br><br>Startset ${escapeHtml(startSetName)} · ${state.roundsWon} Runden gewonnen · +${state.dataEarned} Data</div><div class="report-summary"><div class="report-metric"><strong>${stats.hands}</strong><span>Hände</span></div><div class="report-metric"><strong>${avg.toLocaleString("de-DE")}</strong><span>Ø Hand</span></div><div class="report-metric"><strong>×${avgRatio.toFixed(2).replace(".",",")}</strong><span>Ø Zielanteil</span></div><div class="report-metric"><strong>×${maxRatio.toFixed(2).replace(".",",")}</strong><span>Top Hand / Ziel</span></div><div class="report-metric"><strong>${avgTurns.toFixed(1).replace(".",",")}</strong><span>Ø Züge übrig</span></div><div class="report-metric"><strong>R${stats.buildOnlineRound || "–"}</strong><span>Build online</span></div><div class="report-metric"><strong>R${stats.firstEngineRound || "–"}</strong><span>Erste Engine</span></div><div class="report-metric"><strong>R${stats.firstXMultRound || "–"}</strong><span>Erste ×Mult</span></div></div><h3>Score-Anteile</h3><div class="report-bars">${sourceBars}</div><h3>Kombinationen</h3><div class="report-bars">${bars}</div><h3>Signature Hands</h3><p>Full House ${stats.signatureCounts?.full_house || 0} · Perfect Split ${stats.signatureCounts?.perfect_split || 0} · Double Exact ${stats.signatureCounts?.double_exact || 0}</p><h3>Bosses</h3><p>${Object.entries(stats.bossesSeen || {}).map(([id,count]) => `${escapeHtml(BOSSES.find(b => b.id === id)?.name || id)} ×${count}`).join(" · ") || "Keine"}</p><h3>Core Build</h3><p>${escapeHtml(coreList)}</p><div class="report-actions"><button id="exportReportTextBtn" class="utility-btn">TXT</button><button id="exportReportJsonBtn" class="utility-btn">JSON</button><button id="shareReportBtn" class="utility-btn">REPORT TEILEN</button><button id="shareSeedBtn" class="utility-btn">SEED TEILEN</button></div>`);
         $("exportReportTextBtn").addEventListener("click", () => downloadRunReport("txt"));
         $("exportReportJsonBtn").addEventListener("click", () => downloadRunReport("json"));
         $("shareReportBtn").addEventListener("click", shareRunReport);
@@ -6238,7 +6645,7 @@
 
       $("bossStatusBtn").addEventListener("click", openBossDetail);
       $("contractStatusBtn").addEventListener("click", openContractDetail);
-      $("buildStatusBtn").addEventListener("click", openModsDetail);
+      $("buildStatusBtn").addEventListener("click", openBuildCompass);
       $("programStatusBtn").addEventListener("click", openProgramsDetail);
       $("flowStrip").addEventListener("click", openFlowDetail);
       $("pulseBtn").addEventListener("click", openPulseDetail);
@@ -6262,7 +6669,9 @@
       $("closeCodexBtn").addEventListener("click", () => codexDialog.close());
       $("glossaryTabBtn").addEventListener("click", () => { codexTab = "glossary"; renderCodex(); });
       $("collectionTabBtn").addEventListener("click", () => { codexTab = "collection"; renderCodex(); });
-      $("scoreSequence").addEventListener("click", () => { skipScoreAnimation = true; });
+      $("scoreSequence").addEventListener("click", event => { if (event.target.closest("button")) return; skipScoreAnimation = true; });
+      $("scoreLedgerBtn").addEventListener("click", event => { event.stopPropagation(); openScoreLedger(); });
+      $("comboHint").addEventListener("click", openBuildCompass);
       $("updateAppBtn").addEventListener("click", () => waitingServiceWorker?.postMessage({ type:"SKIP_WAITING" }));
       manageDialog.addEventListener("cancel", event => { if (state.pendingPack || $("closeManageBtn").disabled) event.preventDefault(); });
 
