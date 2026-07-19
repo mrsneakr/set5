@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <title>SET/5 v1.7 – One Screen / Clear Build</title>
+  <title>SET/5 v1.8 – Layout & Archetypes</title>
   <style>
     :root {
       --ink: #17171b;
@@ -2033,8 +2033,6 @@
       cursor:pointer;
     }
     .combo-hint::after { content:'›'; color:var(--ink); font-size:16px; margin-left:auto; }
-    .die-wrap.hint-focus .die { outline:4px solid rgba(76,166,255,.34); outline-offset:2px; }
-    .die-wrap.hint-change .die { outline:3px dashed rgba(255,79,131,.52); outline-offset:3px; }
 
     .build-compass-head {
       display:grid;
@@ -2087,13 +2085,257 @@
       .sequence-row { min-height:38px; padding:5px 8px; }
     }
 
+
+    /* v1.8 · Layout & Archetypes */
+    #gameScreen:not(.hidden) {
+      height:calc(100dvh - 34px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      min-height:560px;
+      display:grid;
+      grid-template-rows:auto auto auto minmax(0,1fr) auto;
+      gap:8px;
+      overflow:hidden;
+    }
+    #gameScreen .topbar { margin:0; }
+    #gameScreen .progress-wrap { margin:0; }
+    #gameScreen .status-dock { padding:0; overflow:visible; }
+    #gameScreen .status-pill {
+      flex:1 1 0;
+      min-width:0;
+      min-height:42px;
+      border-radius:14px;
+      padding:5px 8px;
+    }
+    #gameScreen .status-text { max-width:none; font-size:8px; }
+
+    #gameScreen .board {
+      min-height:0;
+      height:100%;
+      padding:12px;
+      border-radius:32px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(145px,.72fr);
+      grid-template-rows:auto minmax(150px,1fr) auto auto;
+      gap:8px;
+      align-content:stretch;
+    }
+    #gameScreen .subline {
+      grid-column:1 / -1;
+      margin:0;
+      gap:8px;
+    }
+    #gameScreen .substat {
+      min-height:56px;
+      padding:8px 11px;
+      border-radius:17px;
+    }
+    #gameScreen .substat-label { font-size:9px; }
+    #gameScreen .substat-value { font-size:24px; }
+    #gameScreen .turn-pip { width:9px; height:9px; }
+
+    #gameScreen .dice-grid {
+      grid-column:1 / -1;
+      min-height:0;
+      height:100%;
+      margin:0;
+      padding:6px 0 3px;
+      display:flex;
+      align-content:center;
+      align-items:center;
+      justify-content:center;
+      gap:clamp(7px,2.2vw,11px);
+    }
+    #gameScreen .die-wrap {
+      width:clamp(60px,15.3vw,74px);
+      padding-bottom:22px;
+    }
+    #gameScreen .die {
+      width:clamp(60px,15.3vw,74px);
+      height:clamp(60px,15.3vw,74px);
+      border-radius:20px;
+    }
+    #gameScreen .die-value { font-size:clamp(30px,8vw,38px); }
+    #gameScreen .hold-btn { width:26px; height:26px; }
+    #gameScreen .die-type { font-size:9px; }
+
+    #comboHint { display:none !important; }
+
+    #gameScreen .group-picker { grid-column:1 / -1; margin:0; }
+    #gameScreen .control-dock {
+      grid-column:1;
+      margin:0;
+      min-width:0;
+    }
+    #gameScreen .tool-strip { height:100%; }
+    #gameScreen .micro-control {
+      min-height:43px;
+      width:100%;
+      border-radius:14px;
+      justify-content:center;
+    }
+    #gameScreen .flow-strip {
+      grid-column:2;
+      margin:0;
+      min-height:43px;
+      border-radius:14px;
+      grid-template-columns:auto auto 1fr auto;
+    }
+    #gameScreen .groups {
+      grid-column:1 / -1;
+      gap:7px;
+    }
+    #gameScreen .group-card {
+      width:100%;
+      min-height:50px;
+      grid-template-columns:38px minmax(0,1fr) auto;
+      padding:6px 8px;
+      gap:8px;
+      border-radius:15px;
+      text-align:left;
+      font:inherit;
+    }
+    #gameScreen .group-title {
+      width:30px;
+      height:30px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+    }
+    #gameScreen .mini-dice { min-height:25px; gap:4px; overflow:visible; }
+    #gameScreen .mini-die { width:24px; height:24px; font-size:12px; }
+    #gameScreen .combo-info { min-width:86px; }
+    #gameScreen .combo-name {
+      max-width:150px;
+      font-size:8px;
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:3px;
+    }
+    #gameScreen .combo-name span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    #gameScreen .combo-score { font-size:18px; }
+    .group-empty-plus { color:var(--muted); font-size:19px; font-weight:1000; }
+
+    #gameScreen .actions {
+      position:static;
+      margin:0;
+      gap:10px;
+      padding:0 0 max(2px, env(safe-area-inset-bottom));
+    }
+    #gameScreen .actions .primary-btn,
+    #gameScreen .actions .secondary-btn { min-height:72px; border-radius:22px; }
+
+    .group-sheet-head {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      align-items:end;
+      border:2.5px solid var(--line);
+      border-radius:17px;
+      padding:10px;
+      background:white;
+    }
+    .group-sheet-dice { grid-column:1 / -1; display:flex; gap:5px; flex-wrap:wrap; }
+    .group-detail-die {
+      width:34px; height:34px; border:2px solid var(--line); border-radius:10px;
+      display:grid; place-items:center; background:white; font-weight:1000;
+    }
+    .group-sheet-head strong { font-size:14px; }
+    .group-sheet-head b { font-size:24px; }
+    .group-sheet-move {
+      border:2px solid var(--line); border-radius:13px; background:white;
+      min-height:42px; padding:0 14px; font-weight:1000;
+    }
+
+    .shop-build-strip { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:8px; }
+    .archetype-slot, .scaling-slot {
+      min-height:42px;
+      border:2px solid rgba(23,23,27,.12);
+      border-radius:13px;
+      padding:6px 8px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:9px;
+      font-weight:1000;
+      text-transform:uppercase;
+      text-align:left;
+    }
+    .archetype-slot { cursor:pointer; background:#f5f1ff; }
+    .archetype-slot .game-icon, .scaling-slot .game-icon { width:17px; height:17px; }
+    .chase-badge {
+      display:inline-flex;
+      min-height:17px;
+      align-items:center;
+      padding:1px 6px;
+      border:1.8px solid var(--line);
+      border-radius:999px;
+      background:var(--yellow);
+      font-size:8px;
+      font-weight:1000;
+    }
+
+    .archetype-hero {
+      display:grid;
+      grid-template-columns:52px 1fr;
+      gap:11px;
+      align-items:center;
+      border:2.5px solid var(--line);
+      border-radius:19px;
+      padding:11px;
+      background:#f5f1ff;
+    }
+    .archetype-hero-icon {
+      width:52px; height:52px; border:2.5px solid var(--line); border-radius:16px;
+      background:white; display:grid; place-items:center;
+    }
+    .archetype-hero-icon .game-icon { width:28px; height:28px; }
+    .archetype-hero span { color:var(--muted); font-size:9px; font-weight:1000; letter-spacing:.08em; }
+    .archetype-hero strong { display:block; font-size:18px; }
+    .archetype-hero p { margin:3px 0 0; color:var(--muted); font-size:10px; line-height:1.3; }
+    .archetype-meta { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 12px; }
+    .archetype-meta span, .archetype-goals span {
+      border:2px solid rgba(23,23,27,.11); border-radius:999px; background:white;
+      padding:4px 8px; font-size:9px; font-weight:1000; text-transform:uppercase;
+    }
+    .archetype-piece-grid { display:grid; gap:6px; margin-bottom:12px; }
+    .archetype-piece {
+      display:grid; grid-template-columns:30px 1fr auto; gap:8px; align-items:center;
+      border:2px solid var(--line); border-radius:13px; background:white; padding:7px 9px;
+    }
+    .archetype-piece > span { width:28px; height:28px; display:grid; place-items:center; }
+    .archetype-piece .game-icon { width:18px; height:18px; }
+    .archetype-piece strong { font-size:11px; }
+    .archetype-piece small { font-size:8px; color:var(--muted); font-weight:1000; }
+    .archetype-piece.owned { border-left:6px solid var(--mint); }
+    .archetype-piece.wanted { border-left:6px solid var(--yellow); }
+    .archetype-empty { color:var(--muted); font-size:10px; font-weight:900; padding:6px 2px; }
+    .archetype-goals { display:flex; flex-wrap:wrap; gap:6px; }
+
+    @media (max-height:760px) {
+      #gameScreen:not(.hidden) { gap:6px; }
+      #gameScreen .board { grid-template-rows:auto minmax(120px,1fr) auto auto; padding:9px; gap:6px; }
+      #gameScreen .substat { min-height:48px; padding:6px 9px; }
+      #gameScreen .die-wrap { width:clamp(56px,14.6vw,68px); padding-bottom:20px; }
+      #gameScreen .die { width:clamp(56px,14.6vw,68px); height:clamp(56px,14.6vw,68px); }
+      #gameScreen .group-card { min-height:45px; padding:5px 7px; }
+      #gameScreen .actions .primary-btn, #gameScreen .actions .secondary-btn { min-height:62px; }
+    }
+
+    @media (max-width:380px) {
+      #gameScreen .board { grid-template-columns:1fr 132px; }
+      #gameScreen .combo-name { max-width:105px; }
+      #gameScreen .status-text { display:block; font-size:7px; }
+      .shop-build-strip { grid-template-columns:1fr; }
+    }
+
   </style>
 </head>
 <body>
   <main class="app">
     <section id="introScreen" class="screen-card">
       <div class="brand">SET<span>/5</span></div>
-      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.7</small></h1>
+      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.8</small></h1>
       <p>Wirf, halte und teile deine Würfel in bis zu drei Gruppen. Baue im Shop einen Run, der immer stärker und seltsamer wird.</p>
 
       <div class="intro-steps">
@@ -2107,7 +2349,7 @@
         </div>
         <div class="intro-step">
           <div class="step-num">3</div>
-          <div><strong>Build bauen</strong><br><small>Kaufe Mods, Spezialwürfel und Programme. Suche früh nach einer klaren Build-Richtung.</small></div>
+          <div><strong>Build bauen</strong><br><small>Kaufe Kernteile, Scaling und einen seltenen Capstone für einen klaren Archetyp.</small></div>
         </div>
       </div>
 
@@ -2206,7 +2448,7 @@
         </div>
 
         <div id="diceGrid" class="dice-grid" aria-live="polite"></div>
-        <button id="comboHint" class="combo-hint hidden" type="button" aria-live="polite" aria-label="Build-Empfehlung öffnen"></button>
+        <button id="comboHint" class="combo-hint hidden" type="button" tabindex="-1" aria-hidden="true"></button>
         <div id="groupPicker" class="group-picker hidden" aria-live="polite">
           <span id="groupPickerLabel">Würfel wählen</span>
           <button type="button" data-assign-group="0">FREI</button>
@@ -2273,7 +2515,7 @@
           <div class="round-label">Runde geschafft</div>
           <h2>SHOP</h2>
           <p id="shopSummary">Baue deinen Run weiter aus.</p>
-          <div id="scalingSlot" class="scaling-slot"><span>∞</span><strong>Scaling: frei</strong></div>
+          <div class="shop-build-strip"><button id="archetypeSlot" class="archetype-slot" type="button"><span></span><strong>BUILD · offen</strong></button><div id="scalingSlot" class="scaling-slot"><span>∞</span><strong>Scaling: frei</strong></div></div>
           <div id="shopEconomy" class="shop-economy"></div>
         </header>
         <div id="shopOffers" class="shop-grid"></div>
@@ -2527,6 +2769,12 @@
         { id:"target_matrix", name:"Target Matrix", desc:"Jede Zielsumme multipliziert die gesamte Hand.", price:11, icon:"◎", rarity:"rare", maxLevel:3, engine:true, family:"target" },
         { id:"parity_grid", name:"Parity Grid", desc:"Jeder Gleichklang multipliziert die gesamte Hand.", price:11, icon:"◐", rarity:"rare", maxLevel:3, engine:true, family:"parity" },
         { id:"power_core", name:"Power Core", desc:"Jedes Power Trio multipliziert die gesamte Hand.", price:12, icon:"▲", rarity:"rare", maxLevel:3, engine:true, family:"power" },
+        { id:"mirror_core", name:"Mirror Core", desc:"Zwei oder mehr Pair-Familiengruppen multiplizieren die Hand ×2,10.", price:20, icon:"◇", rarity:"experimental", maxLevel:1, engine:true, family:"pair", archetype:"pair", capstone:true },
+        { id:"perfect_line", name:"Perfect Line", desc:"Grand Straight oder zwei Sequence-Gruppen multiplizieren die Hand ×2,15.", price:20, icon:"⌁", rarity:"experimental", maxLevel:1, engine:true, family:"sequence", archetype:"sequence", capstone:true },
+        { id:"dead_center", name:"Dead Center", desc:"Zwei Exact-Gruppen multiplizieren die Hand ×2,25.", price:20, icon:"◎", rarity:"experimental", maxLevel:1, engine:true, family:"target", archetype:"target", capstone:true },
+        { id:"overload", name:"Overload", desc:"Maximum oder zwei Power-Gruppen multiplizieren die Hand stark.", price:20, icon:"▲", rarity:"experimental", maxLevel:1, engine:true, family:"power", archetype:"power", capstone:true },
+        { id:"binary_field", name:"Binary Field", desc:"Alle verwendeten Würfel mit gleicher Parität multiplizieren die Hand ×2,15.", price:20, icon:"◐", rarity:"experimental", maxLevel:1, engine:true, family:"parity", archetype:"parity", capstone:true },
+        { id:"crown_protocol", name:"Crown Protocol", desc:"Eine Signature Hand multipliziert die Hand zusätzlich ×2,00.", price:20, icon:"◇", rarity:"experimental", maxLevel:1, engine:true, family:"signature", archetype:"signature", capstone:true },
         { id:"gold_rush", name:"Gold Rush", desc:"Gold- und Gilded-Würfel multiplizieren den Score und zahlen mehr Coins.", price:13, icon:"●", rarity:"rare", maxLevel:3, engine:true, economy:true, family:"economy" },
         { id:"echo_chamber", name:"Echo Chamber", desc:"Echo-Würfel verstärken alle Retrigger.", price:13, icon:"↻", rarity:"rare", maxLevel:2, engine:true },
         { id:"glass_cannon", name:"Glass Cannon", desc:"Glass/Volatile-Würfel skalieren stark; eine gruppierte 0 halbiert den Faktor.", price:18, icon:"◇", rarity:"experimental", maxLevel:1, engine:true, family:"risk" },
@@ -2606,10 +2854,11 @@
       // v0.9: Konsolidierter aktiver Content. Legacy-Inhalte bleiben für alte Saves
       // im Code, erscheinen aber nicht mehr neu im Shop.
       const ACTIVE_MOD_IDS = new Set([
-        "pair_protocol","precision","echo","ladder","remainder","investor","tolerance","high_voltage","banker","dividends",
-        "spark_proc","double_down",
+        "pair_protocol","precision","echo","ladder","remainder","investor","tolerance","high_voltage","even_flow","full_set","banker","dividends",
+        "spark_proc","double_down","diversity_engine",
         "pair_reactor","sequence_drive","target_matrix","parity_grid","power_core","gold_rush","echo_lottery","jackpot",
-        "perfect_machine","momentum","venture","flow_memory"
+        "perfect_machine","momentum","venture","flow_memory",
+        "mirror_core","perfect_line","dead_center","overload","binary_field","crown_protocol"
       ]);
       const ACTIVE_DIE_IDS = new Set(["low","high","even","odd","volatile","pulse","gold"]);
       const ACTIVE_STATION_IDS = new Set(["upgrade_bench","black_market","face_lab"]);
@@ -2717,7 +2966,7 @@
         ["Data", "Meta-Währung aus abgeschlossenen Runs. Sie schaltet Startsets und später neue Inhalte frei, aber keine permanenten Stats."]
       ];
 
-      const SAVE_VERSION = 17;
+      const SAVE_VERSION = 18;
       const META_DEFAULTS = {
         version:9,
         data:0,
@@ -2824,6 +3073,7 @@
         Target:{ icon:"target", goals:["Double Exact","Perfect Split","Perfect Flow"], setup:["Exact 10","Pair"], family:"target" },
         Parity:{ icon:"parity", goals:["Parity 4","Grand Parity","Perfect Flow"], setup:["Parity Trio","Exact 10"], family:"parity" },
         Power:{ icon:"power", goals:["Maximum","Power Trio","Full House"], setup:["Triple","High values"], family:"high" },
+        Signature:{ icon:"signature", goals:["Full House","Perfect Split","Double Exact"], setup:["Perfect Flow","Full Set"], family:"signature" },
         Pulse:{ icon:"proc", goals:["Premium-Kombo korrigieren","Proc aktivieren"], setup:["±1 / ±2 nutzen"], family:"pulse" },
         Economy:{ icon:"coin", goals:["Coins halten","Scaling finanzieren"], setup:["Zins sichern"], family:"economy" },
         Frozen:{ icon:"chips", goals:["Cryobank stapeln","Würfel halten"], setup:["Frost-Würfel"], family:"frozen" },
@@ -2832,15 +3082,62 @@
         Minimal:{ icon:"build", goals:["Alle Würfel nutzen","Lean Machine"], setup:["5-Würfel-Pool"], family:"minimal" }
       };
 
+      const ARCHETYPES = {
+        pair: {
+          id:"pair", label:"Pair", identity:"Pair", icon:"pair", program:"pair",
+          starter:["pair_protocol"], enabler:["echo"], scaling:["pair_reactor"], capstone:"mirror_core",
+          chase:["pair_protocol","echo","pair_reactor","mirror_core"],
+          goals:["Four Kind","Five Kind","Full House"],
+          summary:"Viele gleiche Werte werden durch Retrigger und Pair-Faktoren immer stärker."
+        },
+        sequence: {
+          id:"sequence", label:"Sequence", identity:"Sequence", icon:"sequence", program:"straight",
+          starter:["ladder"], enabler:["precision"], scaling:["sequence_drive"], capstone:"perfect_line",
+          chase:["ladder","sequence_drive","perfect_line"],
+          goals:["Straight 4","Grand Straight","Perfect Split"],
+          summary:"Lange Folgen und Flow liefern kontrollierte, hohe Multiplikatoren."
+        },
+        target: {
+          id:"target", label:"Target", identity:"Target", icon:"target", program:"target",
+          starter:["precision","tolerance"], enabler:["pulse"], scaling:["target_matrix"], capstone:"dead_center",
+          chase:["precision","tolerance","target_matrix","dead_center"],
+          goals:["Exact 10","Double Exact","Perfect Split"],
+          summary:"Exakte Summen verbinden Gruppen und werden mit Pulse planbar."
+        },
+        parity: {
+          id:"parity", label:"Parity", identity:"Parity", icon:"parity", program:"parity",
+          starter:["even_flow"], enabler:["even","odd"], scaling:["parity_grid"], capstone:"binary_field",
+          chase:["even_flow","parity_grid","binary_field"],
+          goals:["Parity 4","Grand Parity","Perfect Flow"],
+          summary:"Gerade oder ungerade Würfel bilden breite, verlässliche Gruppen."
+        },
+        power: {
+          id:"power", label:"Power", identity:"Power", icon:"power", program:"high",
+          starter:["high_voltage"], enabler:["high","volatile"], scaling:["power_core"], capstone:"overload",
+          chase:["high_voltage","power_core","overload"],
+          goals:["Power Trio","Maximum","Five Kind"],
+          summary:"Hohe Werte und Maximum erzeugen explosive Einzelhände."
+        },
+        signature: {
+          id:"signature", label:"Signature", identity:"Signature", icon:"signature", program:null,
+          starter:["full_set"], enabler:["echo","diversity_engine"], scaling:["flow_memory"], capstone:"crown_protocol",
+          chase:["full_set","diversity_engine","flow_memory","crown_protocol"],
+          goals:["Full House","Perfect Split","Double Exact"],
+          summary:"Unterschiedliche Gruppen und Signature Hands belohnen anspruchsvolle Aufteilungen."
+        }
+      };
+
+      const ARCHETYPE_BY_IDENTITY = Object.fromEntries(Object.values(ARCHETYPES).map(entry => [entry.identity, entry.id]));
+
       let nextDieId = 1;
       let toastTimer = null;
       let audioContext = null;
-      const SAVE_KEY = "set5_run_v17";
-      const LEGACY_SAVE_KEYS = ["set5_run_v16","set5_run_v15","set5_run_v13","set5_run_v09", "set5_run_v08", "set5_run_v07", "set5_run_v06", "set5_run_v05"];
-      const SETTINGS_KEY = "set5_settings_v17";
-      const LEGACY_SETTINGS_KEYS = ["set5_settings_v16","set5_settings_v15","set5_settings_v13","set5_settings_v09", "set5_settings_v08", "set5_settings_v07", "set5_settings_v06"];
-      const META_KEY = "set5_meta_v17";
-      const LEGACY_META_KEYS = ["set5_meta_v16","set5_meta_v15","set5_meta_v13","set5_meta_v09", "set5_meta_v08"];
+      const SAVE_KEY = "set5_run_v18";
+      const LEGACY_SAVE_KEYS = ["set5_run_v17","set5_run_v16","set5_run_v15","set5_run_v13","set5_run_v09", "set5_run_v08", "set5_run_v07", "set5_run_v06", "set5_run_v05"];
+      const SETTINGS_KEY = "set5_settings_v18";
+      const LEGACY_SETTINGS_KEYS = ["set5_settings_v17","set5_settings_v16","set5_settings_v15","set5_settings_v13","set5_settings_v09", "set5_settings_v08", "set5_settings_v07", "set5_settings_v06"];
+      const META_KEY = "set5_meta_v18";
+      const LEGACY_META_KEYS = ["set5_meta_v17","set5_meta_v16","set5_meta_v15","set5_meta_v13","set5_meta_v09", "set5_meta_v08"];
       const TUTORIAL_KEY = "set5_tutorial_done";
       let settings = loadSettings();
       let meta = loadMeta();
@@ -3232,6 +3529,67 @@
 
       function currentScalingEngine() {
         return state.mods.find(mod => isScalingEngine(mod.id)) || null;
+      }
+
+      function activeArchetype() {
+        const identities = detectBuildIdentity();
+        const matched = identities.map(identity => ARCHETYPE_BY_IDENTITY[identity]).find(Boolean);
+        return ARCHETYPES[matched || "pair"];
+      }
+
+      function itemNameById(id) {
+        const mod = MODS.find(entry => entry.id === id);
+        if (mod) return mod.name;
+        const program = PROGRAMS.find(entry => entry.id === id);
+        if (program) return program.name;
+        const die = DIE_TYPES[id];
+        if (die) return `${die.name}-Würfel`;
+        return id;
+      }
+
+      function archetypeTagsForOffer(offer) {
+        const tags = new Set();
+        const id = offer?.id || "";
+        const direct = offer?.archetype || offer?.family;
+        if (direct && ARCHETYPES[direct]) tags.add(direct);
+        const mappings = {
+          pair_protocol:["pair"], echo:["pair","signature"], pair_reactor:["pair"], mirror_core:["pair"],
+          ladder:["sequence"], sequence_drive:["sequence"], perfect_line:["sequence"],
+          precision:["target","sequence"], tolerance:["target"], target_matrix:["target"], dead_center:["target"],
+          even_flow:["parity"], parity_grid:["parity"], binary_field:["parity"],
+          high_voltage:["power"], power_core:["power"], overload:["power"],
+          full_set:["signature"], diversity_engine:["signature"], flow_memory:["signature"], crown_protocol:["signature"],
+          low:["pair"], even:["pair","parity"], odd:["parity"], high:["power"], volatile:["power"], pulse:["target","sequence"], gold:["signature"]
+        };
+        (mappings[id] || []).forEach(tag => tags.add(tag));
+        if (offer?.kind === "program") {
+          const programMap = { pair:"pair", triple:"pair", straight:"sequence", target:"target", parity:"parity", high:"power" };
+          if (programMap[id]) tags.add(programMap[id]);
+        }
+        return [...tags];
+      }
+
+      function ownsArchetypePiece(id) {
+        if (MODS.some(entry => entry.id === id)) return hasMod(id);
+        if (PROGRAMS.some(entry => entry.id === id)) return comboLevel(id) > 1;
+        if (DIE_TYPES[id]) return state.dice.some(die => die.type === id);
+        if (id === "pulse") return state.dice.some(die => die.type === "pulse") || hasMod("pulse_reactor");
+        return false;
+      }
+
+      function archetypeProgress(archetype = activeArchetype()) {
+        const ids = [...new Set(archetype.chase || [])];
+        const owned = ids.filter(ownsArchetypePiece);
+        const wanted = ids.filter(id => !ownsArchetypePiece(id));
+        return { owned, wanted, total:ids.length };
+      }
+
+      function isChaseOffer(offer, archetype = activeArchetype()) {
+        return Boolean(offer && archetype && (archetype.chase || []).includes(offer.id) && !ownsArchetypePiece(offer.id));
+      }
+
+      function archetypeOfferPool(pool, archetype = activeArchetype()) {
+        return pool.filter(offer => archetypeTagsForOffer(offer).includes(archetype.id));
       }
 
       function compactOfferDescription(offer) {
@@ -4120,6 +4478,16 @@
         if (hasMod("parity_grid") && parityGroups) addEngine("Parity Grid", Math.pow(1 + .18 * modPower("parity_grid"), parityGroups));
         const powerGroups = qualifiedActive.filter(result => comboFamily(result.type) === "high").length;
         if (hasMod("power_core") && powerGroups) addEngine("Power Core", Math.pow(1 + .22 * modPower("power_core"), powerGroups));
+        const straightGroups = qualifiedActive.filter(result => comboFamily(result.type) === "straight").length;
+        const hasGrandStraight = qualifiedActive.some(result => result.type === "grand_straight");
+        const hasMaximum = qualifiedActive.some(result => result.type === "maximum");
+        const sameParityHand = grouped.length >= 5 && grouped.every(die => Math.abs(die.value % 2) === Math.abs(grouped[0]?.value % 2));
+        if (hasMod("mirror_core") && pairGroups >= 2) addEngine("Mirror Core", 2.10);
+        if (hasMod("perfect_line") && (hasGrandStraight || straightGroups >= 2)) addEngine("Perfect Line", 2.15);
+        if (hasMod("dead_center") && targetGroups >= 2) addEngine("Dead Center", 2.25);
+        if (hasMod("overload") && (hasMaximum || powerGroups >= 2)) addEngine("Overload", hasMaximum ? 2.50 : 2.15);
+        if (hasMod("binary_field") && unused.length === 0 && sameParityHand) addEngine("Binary Field", 2.15);
+        if (hasMod("crown_protocol") && signature) addEngine("Crown Protocol", 2.00);
         const goldGrouped = grouped.filter(die => die.type === "gold" || die.trait === "gilded").length;
         if (hasMod("gold_rush") && goldGrouped) addEngine("Gold Rush", Math.pow(1 + .10 * modPower("gold_rush"), goldGrouped));
         const glassRisk = grouped.filter(die => ["glass","volatile"].includes(die.type)).length;
@@ -4824,11 +5192,15 @@
       function generateShopOffers(preserved = [], isNewShop = false) {
         const pools = buildOfferPools();
         const slotCount = activeStake().shopSlots;
+        const archetype = activeArchetype();
         if (isNewShop) state.shopsSinceRare = (state.shopsSinceRare || 0) + 1;
         const pityRare = isNewShop && state.round >= 4 && state.shopsSinceRare >= 2;
         const offers = preserved.filter(offer => !offer.purchased).slice(0, slotCount).map(offer => ({ ...offer, locked:true }));
         const used = new Set(offers.map(offer => `${offer.kind}:${offer.id}`));
         const broad = [...pools.modPool, ...pools.programPool, ...pools.diePool, ...pools.itemPool, ...pools.chipPool, ...pools.packPool, ...pools.slotPool, ...pools.stationPool];
+        const buildPool = archetypeOfferPool(broad, archetype);
+        const biasChance = slotCount >= 3 ? .82 : .56;
+        const biasedSlot = state.round >= 2 && seededRandom() < biasChance ? 0 : -1;
 
         const preferred = [
           [...pools.modPool, ...pools.programPool, ...pools.slotPool, ...pools.packPool, ...pools.stationPool],
@@ -4840,6 +5212,14 @@
           const index = offers.length;
           let pool = (preferred[index] || broad).filter(offer => !used.has(`${offer.kind}:${offer.id}`));
           if (!pool.length) pool = broad.filter(offer => !used.has(`${offer.kind}:${offer.id}`));
+
+          if (index === biasedSlot) {
+            const matching = buildPool.filter(offer => !used.has(`${offer.kind}:${offer.id}`));
+            const chase = matching.filter(offer => isChaseOffer(offer, archetype) && (offer.rarity !== "experimental" || (state.round >= 10 && seededRandom() < .18)));
+            if (chase.length && seededRandom() < .48) pool = chase;
+            else if (matching.length) pool = matching;
+          }
+
           const forceRareHere = pityRare && index === Math.min(1, slotCount - 1);
           const minRarity = forceRareHere ? "rare" : (state.shopEvent?.minRarity || (state.lastRoundWasBoss && index === 1 ? "uncommon" : "common"));
           const chosen = weightedOffer(pool, minRarity) || weightedOffer(pool, "common");
@@ -5040,7 +5420,17 @@
         if (pack.packType === "raremod") pool = pools.modPool.filter(offer => rarityData(offer.rarity).rank >= 2);
         if (pack.packType === "die") pool = pools.diePool;
         if (pack.packType === "chip") pool = pools.chipPool;
-        return shuffled(pool).slice(0, 3).map((offer, index) => ({ ...offer, edition:editionForOffer(offer), uid:`pack-${Date.now()}-${index}` }));
+        const archetype = activeArchetype();
+        const matching = archetypeOfferPool(pool, archetype);
+        const chosen = [];
+        if (matching.length && seededRandom() < .72) chosen.push({ ...randomFrom(matching) });
+        const used = new Set(chosen.map(offer => `${offer.kind}:${offer.id}`));
+        shuffled(pool).forEach(offer => {
+          if (chosen.length >= 3) return;
+          const key = `${offer.kind}:${offer.id}`;
+          if (!used.has(key)) { chosen.push({ ...offer }); used.add(key); }
+        });
+        return chosen.slice(0, 3).map((offer, index) => ({ ...offer, edition:editionForOffer(offer), uid:`pack-${Date.now()}-${index}` }));
       }
 
       function grantPackChoice(offer) {
@@ -5652,289 +6042,27 @@
         });
       }
 
-      function getNearComboHint() {
-        if (!state.turnRolled) return null;
-        const dice = state.dice.filter(die => Number.isFinite(die.value));
-        if (dice.length < 3) return null;
-        const identities = detectBuildIdentity();
-        const familyBoost = { Pair:"pair", Sequence:"straight", Target:"target", Parity:"parity", Power:"high" };
-        const preferred = identities.map(identity => familyBoost[identity]).filter(Boolean);
-        const candidates = [];
-        const add = candidate => {
-          const family = comboFamily(candidate.type);
-          candidate.score += preferred[0] === family ? 30 : preferred[1] === family ? 16 : 0;
-          candidates.push(candidate);
-        };
-
-        const byValue = {};
-        dice.forEach(die => (byValue[die.value] ||= []).push(die));
-        const entries = Object.entries(byValue).sort((a,b) => b[1].length - a[1].length);
-        const [topValue, topDice = []] = entries[0] || [];
-        if (topDice.length === 4) add({ type:"five_kind", iconKey:"five", title:"Five Kind", text:"1 gleicher Wert fehlt", score:100, focusIds:topDice.map(d=>d.id), changeIds:dice.filter(d=>String(d.value)!==String(topValue)).map(d=>d.id) });
-        if (topDice.length === 3) add({ type:"four_kind", iconKey:"four", title:"Four Kind", text:"1 gleicher Wert fehlt", score:82, focusIds:topDice.map(d=>d.id), changeIds:dice.filter(d=>String(d.value)!==String(topValue)).map(d=>d.id) });
-        if ((entries[0]?.[1].length || 0) === 2 && (entries[1]?.[1].length || 0) === 2) {
-          const focus = [...entries[0][1], ...entries[1][1]].map(d=>d.id);
-          add({ type:"triple", iconKey:"signature", title:"Full House", text:"1 Treffer entfernt", score:88, focusIds:focus, changeIds:dice.filter(d=>!focus.includes(d.id)).map(d=>d.id) });
-        }
-
-        const unique = [...new Set(dice.map(d=>d.value))].sort((a,b)=>a-b);
-        for (let start = Math.min(...unique)-1; start <= Math.max(...unique); start++) {
-          const window5 = [start,start+1,start+2,start+3,start+4];
-          const present = window5.filter(value=>unique.includes(value));
-          if (present.length === 4) {
-            const focus = dice.filter(d=>window5.includes(d.value)).map(d=>d.id);
-            add({ type:"grand_straight", iconKey:"sequence", title:"Grand Straight", text:`fehlt: ${window5.find(v=>!unique.includes(v))}`, score:96, focusIds:focus, changeIds:dice.filter(d=>!focus.includes(d.id)).map(d=>d.id) });
-          }
-        }
-        for (let start = Math.min(...unique)-1; start <= Math.max(...unique); start++) {
-          const window4 = [start,start+1,start+2,start+3];
-          const present = window4.filter(value=>unique.includes(value));
-          if (present.length === 3) {
-            const focus = dice.filter(d=>window4.includes(d.value)).map(d=>d.id);
-            add({ type:"straight4", iconKey:"sequence", title:"Straight 4", text:`fehlt: ${window4.find(v=>!unique.includes(v))}`, score:72, focusIds:focus, changeIds:dice.filter(d=>!focus.includes(d.id)).map(d=>d.id) });
-          }
-        }
-        const evenDice = dice.filter(d=>d.value % 2 === 0);
-        const oddDice = dice.filter(d=>Math.abs(d.value % 2) === 1);
-        const parityDice = evenDice.length >= oddDice.length ? evenDice : oddDice;
-        if (parityDice.length === 4) add({ type:"grand_parity", iconKey:"parity", title:"Grand Parity", text:"1 passender Wert fehlt", score:76, focusIds:parityDice.map(d=>d.id), changeIds:dice.filter(d=>!parityDice.includes(d)).map(d=>d.id) });
-
-        candidates.sort((a,b)=>b.score-a.score);
-        return candidates[0] || null;
-      }
-
       function buildCompassData() {
-        const identities = detectBuildIdentity();
-        const primary = identities[0] || "Sequence";
-        const secondary = identities[1] || "Pair";
-        const main = BUILD_GUIDE[primary] || BUILD_GUIDE.Sequence;
-        const alt = BUILD_GUIDE[secondary] || BUILD_GUIDE.Pair;
-        const near = getNearComboHint();
+        const archetype = activeArchetype();
+        const progress = archetypeProgress(archetype);
         const currentScaling = currentScalingEngine();
         const highestProgram = PROGRAMS.slice().sort((a,b)=>comboLevel(b.id)-comboLevel(a.id))[0];
-        return { primary, secondary, main, alt, near, currentScaling, highestProgram };
+        return { archetype, progress, currentScaling, highestProgram };
       }
 
       function openBuildCompass() {
         const data = buildCompassData();
-        const goalIcon = name => {
-          if (/kind|house|pair/i.test(name)) return "pair";
-          if (/straight|sequence/i.test(name)) return "sequence";
-          if (/parity/i.test(name)) return "parity";
-          if (/maximum|power|high/i.test(name)) return "power";
-          if (/exact|target/i.test(name)) return "target";
-          if (/flow|split/i.test(name)) return "flow";
-          return "signature";
-        };
-        const goals = [...data.main.goals.slice(0,3), ...data.alt.goals.slice(0,1)].map(goal => `<div class="compass-goal">${gameIcon(goalIcon(goal))}<span>${escapeHtml(goal)}</span></div>`).join("");
-        const near = data.near ? `<div class="compass-goal compass-now">${gameIcon(data.near.iconKey)}<span><b>JETZT</b><br>${escapeHtml(data.near.title)} · ${escapeHtml(data.near.text)}</span></div>` : `<div class="compass-goal compass-now">${gameIcon("flow")}<span><b>JETZT</b><br>Baue zwei unterschiedliche echte Gruppen.</span></div>`;
-        const scaling = data.currentScaling ? `${escapeHtml(data.currentScaling.name)} L${data.currentScaling.level}` : "noch frei";
+        const ownedRows = data.progress.owned.length
+          ? data.progress.owned.map(id => `<div class="archetype-piece owned"><span>${gameIcon(MODS.find(mod=>mod.id===id)?.capstone ? "signature" : "build")}</span><strong>${escapeHtml(itemNameById(id))}</strong><small>AKTIV</small></div>`).join("")
+          : `<div class="archetype-empty">Noch kein Kernteil gefunden.</div>`;
+        const wantedRows = data.progress.wanted.slice(0,3).map(id => {
+          const mod = MODS.find(entry => entry.id === id);
+          const tier = mod?.capstone ? "CAPSTONE" : mod?.rarity === "rare" ? "SCALING" : "PIECE";
+          return `<div class="archetype-piece wanted"><span>${gameIcon(mod?.capstone ? "signature" : offerIconKey(mod || {id}))}</span><strong>${escapeHtml(itemNameById(id))}</strong><small>${tier}</small></div>`;
+        }).join("") || `<div class="archetype-empty">Build komplett · suche Upgrades.</div>`;
+        const scaling = data.currentScaling ? `${escapeHtml(data.currentScaling.name)} L${data.currentScaling.level}` : "frei";
         const program = data.highestProgram ? `${escapeHtml(data.highestProgram.name)} L${comboLevel(data.highestProgram.id)}` : "keines";
-        openDetail("Build Compass", `<div class="build-compass-head"><div class="build-compass-icon">${gameIcon(data.main.icon)}</div><div><span>Dein Build</span><strong>${escapeHtml(data.primary)} + ${escapeHtml(data.secondary)}</strong><small>Scaling: ${scaling} · Top Lab: ${program}</small></div></div><div class="compass-section"><h3>Beste Ziele</h3><div class="compass-goals">${goals}${near}</div></div><div class="dialog-note">Die Empfehlung priorisiert deinen Build und zeigt nur ein aktuelles Ziel. Sie löst den Zug nicht automatisch.</div><button id="compassModsBtn" class="utility-btn" style="width:100%">BUILD DETAILS</button>`);
-        $("compassModsBtn").addEventListener("click", () => { $("detailDialog").close(); openModsDetail(); });
-      }
-
-      function renderGame() {
-        const setNumber = Math.ceil(state.round / 3);
-        const mode = state.boss ? "Boss" : state.encounter?.name || "Score";
-        $("roundLabel").textContent = `Set ${setNumber} · ${mode}${activeStake().id ? ` · S${activeStake().id}` : ""}`;
-        $("scoreValue").textContent = state.score.toLocaleString("de-DE");
-        $("targetValue").textContent = state.target.toLocaleString("de-DE");
-        $("coinValue").textContent = state.coins;
-        $("progressBar").style.width = `${Math.min(100, (state.score / state.target) * 100)}%`;
-
-        const preview = previewHand();
-
-        $("bossStatusBtn").classList.toggle("hidden", !state.boss);
-        if (state.boss) {
-          $("bossShort").textContent = state.boss.name;
-          $("bossStatusBtn").querySelector(".status-icon").innerHTML = gameIcon("boss");
-        }
-
-        const showEncounter = state.encounter && !["score", "boss"].includes(state.encounter.id);
-        const challenge = showEncounter ? state.encounter : state.contract;
-        const challengeMet = showEncounter ? preview.encounterMet : preview.contractMet;
-        $("contractStatusBtn").classList.toggle("hidden", !challenge);
-        if (challenge) {
-          $("contractIcon").innerHTML = gameIcon(showEncounter ? "target" : "signature");
-          $("contractShort").textContent = challenge.name;
-          $("contractDot").className = `status-dot ${challengeMet ? "met" : ""}`;
-          $("contractStatusBtn").setAttribute("aria-label", `${challenge.name}: ${challengeMet ? "erfüllt" : "offen"}`);
-        }
-
-        const identities = detectBuildIdentity();
-        const identity = identities[0];
-        const guide = BUILD_GUIDE[identity] || BUILD_GUIDE.Sequence;
-        $("buildStatusBtn").querySelector(".status-icon").innerHTML = gameIcon(guide.icon);
-        $("buildShort").textContent = identity ? `${identity.toUpperCase()} · ${coreModCount()}/${state.modSlots}` : `${coreModCount()}/${state.modSlots} CORE`;
-        $("programStatusBtn").querySelector(".status-icon").innerHTML = gameIcon("program");
-        const upgradedPrograms = PROGRAMS.filter(program => comboLevel(program.id) > 1);
-        const highestProgram = Math.max(1, ...PROGRAMS.map(program => comboLevel(program.id)));
-        $("programShort").textContent = `L${highestProgram}${upgradedPrograms.length ? ` · ${upgradedPrograms.length}` : ""}`;
-
-        const nearHint = getNearComboHint();
-        renderDice(nearHint);
-        renderGroupPicker();
-        renderGroups(preview);
-        $("comboHint").classList.toggle("hidden", !nearHint);
-        $("comboHint").innerHTML = nearHint ? `<span class="hint-icon">${gameIcon(nearHint.iconKey)}</span><strong>${escapeHtml(nearHint.title)}</strong><span>${escapeHtml(nearHint.text)}</span>` : "";
-
-        const maxTurnSlots = state.encounter?.id === "survival" ? 4 : Math.max(4, state.turnsLeft, 3);
-        const maxRerollSlots = Math.max(4, baseRerolls() + state.nextRound.rerolls, state.rerolls, 2);
-        const turnPips = Array.from({ length:maxTurnSlots }, (_, index) => `<span class="turn-pip turn ${index < state.turnsLeft ? "" : "empty"}"></span>`).join("");
-        const rerollPips = Array.from({ length:maxRerollSlots }, (_, index) => `<span class="turn-pip reroll ${index < state.rerolls ? "" : "empty"}"></span>`).join("");
-        $("turnsText").innerHTML = `<span class="substat-label">Züge übrig</span><div class="substat-main"><strong class="substat-value">${state.turnsLeft}</strong><span class="substat-copy">Moves</span></div><div class="substat-pips">${turnPips}</div>`;
-        $("rerollText").innerHTML = `<span class="substat-label">Re-rolls</span><div class="substat-main"><strong class="substat-value">${state.rerolls}</strong><span class="substat-copy">Versuche</span></div><div class="substat-pips">${rerollPips}</div>`;
-        $("rerollBtn").firstChild.textContent = state.turnRolled ? "NEU WÜRFELN\n          " : "WÜRFELN\n          ";
-        $("rerollSub").textContent = state.turnRolled ? `${state.rerolls}× verfügbar` : `Startwurf · ${state.rerolls} Re-rolls danach`;
-        $("pulseSub").textContent = state.pulseAvailable ? "1×" : "VERBRAUCHT";
-        $("pulseBtn").classList.toggle("used", !state.pulseAvailable);
-        $("pulseBtn").disabled = !state.turnRolled || !state.pulseAvailable || state.isRolling || state.isScoring;
-
-        $("flowStrip").querySelector(".flow-icon").innerHTML = gameIcon("flow");
-        $("flowLabel").textContent = preview.perfectFlow ? "×1,50" : `×${preview.maxFlow.toFixed(2).replace(".", ",")}`;
-        const flags = [];
-        if (preview.perfectFlow) flags.push("PERFECT");
-        if (preview.signature) flags.push(preview.signature.name.toUpperCase());
-        if (!preview.contractMet && state.contract) flags.push("30 %");
-        if (showEncounter && !preview.encounterMet) flags.push("ZIEL OFFEN");
-        $("flowFlags").textContent = flags.join(" · ") || "FLOW";
-        $("flowTotal").textContent = preview.total.toLocaleString("de-DE");
-
-        $("scoreSub").textContent = `${preview.total.toLocaleString("de-DE")} Punkte`;
-        $("rerollBtn").disabled = (state.turnRolled && state.rerolls <= 0) || state.isRolling || state.isScoring;
-        $("scoreBtn").disabled = !state.turnRolled || preview.total <= 0 || state.isRolling || state.isScoring;
-        $("gameScreen").classList.toggle("pre-roll", !state.turnRolled);
-      }
-
-      function renderDice(nearHint = null) {
-        const grid = $("diceGrid");
-        grid.innerHTML = "";
-
-        state.dice.forEach(die => {
-          const data = DIE_TYPES[die.type];
-          const wrap = document.createElement("div");
-          const hintClass = nearHint?.focusIds?.includes(die.id) ? "hint-focus" : nearHint?.changeIds?.includes(die.id) ? "hint-change" : "";
-          wrap.className = `die-wrap type-${die.type} ${die.held ? "held" : ""} ${die.frozen ? "frozen" : ""} ${data.rarity === "rare" ? "rare" : ""} ${hintClass}`;
-          wrap.dataset.dieId = die.id;
-
-          const groupBadge = document.createElement("div");
-          groupBadge.className = `group-badge g${die.group}`;
-          groupBadge.textContent = die.group ? `G${die.group}` : "";
-
-          const hold = document.createElement("button");
-          hold.className = "hold-btn";
-          hold.type = "button";
-          hold.disabled = !state.turnRolled || die.frozen || data.holdable === false || die.trait === "overcharged";
-          hold.setAttribute("aria-label", `${data.name}-Würfel ${die.held ? "freigeben" : "halten"}`);
-          hold.textContent = die.frozen ? "×" : (data.holdable === false || die.trait === "overcharged") ? "–" : die.held ? "●" : "○";
-          hold.addEventListener("click", event => {
-            event.stopPropagation();
-            toggleHold(die.id);
-          });
-
-          const button = document.createElement("button");
-          button.className = `die ${state.selectedDieId === die.id ? "selected" : ""}`;
-          button.type = "button";
-          button.dataset.dieId = die.id;
-          button.setAttribute("aria-label", `${data.name}-Würfel, Wert ${Number.isFinite(die.value) ? die.value : "noch nicht gewürfelt"}, Gruppe ${die.group || "keine"}`);
-          button.innerHTML = `<span class="die-value">${Number.isFinite(die.value) ? die.value : "?"}</span>`;
-          button.addEventListener("click", () => toggleGroup(die.id));
-
-          const label = document.createElement("div");
-          label.className = "die-type";
-          label.textContent = data.short;
-          const traitBadge = die.trait ? document.createElement("div") : null;
-          if (traitBadge) {
-            traitBadge.className = "die-trait-badge";
-            traitBadge.textContent = DIE_TRAITS[die.trait].symbol;
-            traitBadge.setAttribute("aria-label", DIE_TRAITS[die.trait].label);
-          }
-          const faceBadge = die.faceMod ? document.createElement("div") : null;
-          if (faceBadge) {
-            faceBadge.className = "die-face-badge";
-            faceBadge.textContent = "ƒ";
-            faceBadge.setAttribute("aria-label", `Face Lab: ${die.faceMod}`);
-          }
-
-          wrap.append(groupBadge, hold, button, label);
-          if (traitBadge) wrap.appendChild(traitBadge);
-          if (faceBadge) wrap.appendChild(faceBadge);
-          grid.appendChild(wrap);
-        });
-      }
-
-      function renderGroupPicker() {
-        const picker = $("groupPicker");
-        if (!picker) return;
-        const die = state.dice.find(entry => entry.id === state.selectedDieId);
-        const visible = Boolean(die && state.turnRolled && (settings.grouping || "select") === "select");
-        picker.classList.toggle("hidden", !visible);
-        if (!visible) return;
-        $("groupPickerLabel").textContent = `${DIE_TYPES[die.type].name} ${die.value} →`;
-        picker.querySelectorAll("[data-assign-group]").forEach(button => {
-          const group = Number(button.dataset.assignGroup);
-          button.disabled = group > maxGroups() || (die.type === "anchor" && ![0,1].includes(group));
-        });
-      }
-
-
-      function swapGroups(a, b) {
-        if (state.phase !== "play" || state.isRolling || state.isScoring || !state.turnRolled) return;
-        state.dice.forEach(die => {
-          if (die.group === a) die.group = -99;
-          else if (die.group === b) die.group = a;
-        });
-        state.dice.forEach(die => { if (die.group === -99) die.group = b; });
-        vibrate(10);
-        render();
-      }
-
-      function offerSynergyTags(offer) {
-        const id = `${offer.id || ""} ${offer.name || ""} ${offer.desc || ""}`.toLowerCase();
-        const tags = [];
-        if (/pair|duplicate|reactor/.test(id)) tags.push('Pair');
-        if (/straight|sequence|ladder/.test(id)) tags.push('Sequence');
-        if (/target|exact|precision/.test(id)) tags.push('Target');
-        if (/parity|even|odd/.test(id)) tags.push('Parity');
-        if (/power|high|maximum/.test(id)) tags.push('Power');
-        if (/pulse|flip/.test(id)) tags.push('Pulse');
-        if (/frost|frozen|cryo/.test(id)) tags.push('Frozen');
-        if (/bank|dividend|bond|invest|greed|gold|capital/.test(id)) tags.push('Economy');
-        if (/glass|volatile|overcharged|hazard/.test(id)) tags.push('Volatile');
-        if (/divers|rainbow|prism/.test(id)) tags.push('Diversity');
-        if (!tags.length && offer.kind === 'program') {
-          const familyMap = { pair:'Pair', triple:'Pair', straight:'Sequence', target:'Target', parity:'Parity', high:'Power' };
-          const family = familyMap[offer.id];
-          if (family) tags.push(family);
-        }
-        return [...new Set(tags)];
-      }
-
-      function describeOfferSynergy(offer) {
-        const build = detectBuildIdentity();
-        const tags = offerSynergyTags(offer);
-        const matches = tags.filter(tag => build.includes(tag));
-        if (matches.length >= 2) return `SYNERGY ×${matches.length} · ${matches.join(' + ')}`;
-        if (matches.length === 1) return `SYNERGY · ${matches[0]}`;
-        if (tags.length) return `SIDE PATH · ${tags[0]}`;
-        return null;
-      }
-
-      function offerSynergyEvidence(offer) {
-        const tags = offerSynergyTags(offer);
-        const build = detectBuildIdentity();
-        const evidence = [];
-        tags.forEach(tag => {
-          if (build.includes(tag)) evidence.push(`${tag} ist Teil deines aktuellen Builds`);
-          const familyMap = { Pair:"pair", Sequence:"straight", Target:"target", Parity:"parity", Power:"high" };
-          const family = familyMap[tag];
-          if (family && comboLevel(family) > 1) evidence.push(`${tag} Lab L${comboLevel(family)}`);
-        });
-        if (offer.kind === "mod" && getMod(offer.id)) evidence.push(`${offer.name} wird aufgewertet`);
-        if (offer.kind === "program") evidence.push(`direktes Programm-Upgrade`);
-        if (!evidence.length) evidence.push("Utility oder neue Build-Richtung");
-        return [...new Set(evidence)].slice(0,3);
+        openDetail("Build", `<div class="archetype-hero"><div class="archetype-hero-icon">${gameIcon(data.archetype.icon)}</div><div><span>DEIN ARCHETYP</span><strong>${escapeHtml(data.archetype.label)}</strong><p>${escapeHtml(data.archetype.summary)}</p></div></div><div class="archetype-meta"><span>SCALING · ${scaling}</span><span>LAB · ${program}</span></div><h3>CORE</h3><div class="archetype-piece-grid">${ownedRows}</div><h3>WANT</h3><div class="archetype-piece-grid">${wantedRows}</div><h3>SPIELT AUF</h3><div class="archetype-goals">${data.archetype.goals.map(goal=>`<span>${escapeHtml(goal)}</span>`).join("")}</div>`);
       }
 
       function openOfferSynergyDetail(offer) {
@@ -5970,22 +6098,35 @@
         }
       }
 
+      function openGroupDetail(groupIndex, result = evaluateGroup(groupIndex)) {
+        const formula = result.total > 0
+          ? `${Math.round(result.chips)} Chips × ${result.mult.toFixed(2).replace(".", ",")} Mult${result.flowFactor > 1 ? ` × ${result.flowFactor.toFixed(2).replace(".", ",")} Flow` : ""}`
+          : "Noch keine Würfel zugeordnet.";
+        const dice = result.dice?.length ? result.dice.map(die => `<span class="group-detail-die type-${die.type}">${die.value}</span>`).join("") : `<span class="archetype-empty">Leer</span>`;
+        const actions = [];
+        if (groupIndex > 1) actions.push(`<button class="group-sheet-move" type="button" data-group-move="${groupIndex-1},${groupIndex}">← G${groupIndex-1}</button>`);
+        if (groupIndex < maxGroups()) actions.push(`<button class="group-sheet-move" type="button" data-group-move="${groupIndex},${groupIndex+1}">G${groupIndex+1} →</button>`);
+        openDetail(`Gruppe ${groupIndex}`, `<div class="group-sheet-head"><div class="group-sheet-dice">${dice}</div><strong>${escapeHtml(result.name || "Leer")}</strong><b>${(result.scoredTotal ?? result.total ?? 0).toLocaleString("de-DE")}</b></div><div class="dialog-note">${escapeHtml(formula)}</div>${actions.length ? `<div class="dialog-actions">${actions.join("")}</div>` : ""}`);
+        $("detailBody").querySelectorAll("[data-group-move]").forEach(button => button.addEventListener("click", () => {
+          const [a,b] = button.dataset.groupMove.split(",").map(Number);
+          swapGroups(a,b);
+          $("detailDialog").close();
+        }));
+      }
+
       function renderGroups(preview = previewHand()) {
         const groups = $("groups");
         groups.innerHTML = "";
 
         preview.evals.forEach((result, index) => {
           const groupIndex = index + 1;
-          const card = document.createElement("div");
-          const expanded = state.expandedGroup === groupIndex;
-          card.className = `group-card ${expanded ? "expanded" : ""} ${groupIndex > maxGroups() ? "disabled" : ""} ${state.selectedDieId && groupIndex <= maxGroups() ? "assignable" : ""}`;
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = `group-card ${groupIndex > maxGroups() ? "disabled" : ""} ${state.selectedDieId && groupIndex <= maxGroups() ? "assignable" : ""}`;
           card.dataset.groupIndex = groupIndex;
           card.addEventListener("click", () => {
             if (state.selectedDieId) assignSelectedDie(groupIndex);
-            else {
-              state.expandedGroup = expanded ? 0 : groupIndex;
-              renderGroups(previewHand());
-            }
+            else if (groupIndex <= maxGroups()) openGroupDetail(groupIndex, result);
           });
 
           const title = document.createElement("div");
@@ -6002,36 +6143,16 @@
               miniDice.appendChild(mini);
             });
           } else {
-            miniDice.innerHTML = `<span style="color:var(--muted);font-size:18px;font-weight:900">+</span>`;
+            miniDice.innerHTML = `<span class="group-empty-plus">+</span>`;
           }
 
           const info = document.createElement("div");
           info.className = "combo-info";
           const levelText = isQualified(result) && result.level > 1 ? ` L${result.level}` : "";
-          const flowText = result.flowFactor > 1 ? ` ×${result.flowFactor.toFixed(2).replace(".", ",")}` : "";
-          info.innerHTML = `<div class="combo-name">${gameIcon(comboIconKey(result.type))}${escapeHtml(result.name)}${levelText}${flowText}</div><div class="combo-score">${(result.scoredTotal ?? result.total).toLocaleString("de-DE")}</div>`;
+          const flowText = result.flowFactor > 1 ? ` · ×${result.flowFactor.toFixed(2).replace(".", ",")}` : "";
+          info.innerHTML = `<div class="combo-name">${gameIcon(comboIconKey(result.type))}<span>${escapeHtml(result.name)}${levelText}${flowText}</span></div><div class="combo-score">${(result.scoredTotal ?? result.total).toLocaleString("de-DE")}</div>`;
 
-          const detail = document.createElement("div");
-          detail.className = "group-detail";
-          const formula = result.total > 0
-            ? `${Math.round(result.chips)} C × ${result.mult.toFixed(2).replace(".", ",")} M${result.flowFactor > 1 ? ` × ${result.flowFactor.toFixed(2).replace(".", ",")} Flow` : ""}`
-            : "Würfel durch Antippen zuweisen";
-          detail.innerHTML = `<span class="group-formula">${escapeHtml(formula)}</span><span class="group-actions"></span>`;
-          const actions = detail.querySelector(".group-actions");
-          if (groupIndex > 1) {
-            const up = document.createElement("button");
-            up.type = "button"; up.className = "group-action"; up.textContent = `← G${groupIndex - 1}`;
-            up.addEventListener("click", event => { event.stopPropagation(); swapGroups(groupIndex - 1, groupIndex); });
-            actions.appendChild(up);
-          }
-          if (groupIndex < maxGroups()) {
-            const down = document.createElement("button");
-            down.type = "button"; down.className = "group-action"; down.textContent = `G${groupIndex + 1} →`;
-            down.addEventListener("click", event => { event.stopPropagation(); swapGroups(groupIndex, groupIndex + 1); });
-            actions.appendChild(down);
-          }
-
-          card.append(title, miniDice, info, detail);
+          card.append(title, miniDice, info);
           groups.appendChild(card);
         });
       }
@@ -6047,6 +6168,10 @@
         $("scalingSlot").innerHTML = scaling
           ? `<span>${gameIcon("scaling")}</span><strong>${escapeHtml(scaling.name)} L${scaling.level}${state.scalingAmplifier ? ` · +${Math.round(state.scalingAmplifier * 100)} %` : ""}</strong>`
           : `<span>${gameIcon("scaling")}</span><strong>Scaling Slot frei</strong>`;
+        const archetype = activeArchetype();
+        const archetypeState = archetypeProgress(archetype);
+        $("archetypeSlot").querySelector("span").innerHTML = gameIcon(archetype.icon);
+        $("archetypeSlot").querySelector("strong").textContent = `BUILD · ${archetype.label.toUpperCase()} ${archetypeState.owned.length}/${archetypeState.total}`;
 
         const container = $("shopOffers");
         container.innerHTML = "";
@@ -6070,7 +6195,8 @@
           const capacityHint = offer.kind === "mod" && !existingMod && offer.edition !== "compact" && coreModCount() >= state.modSlots ? " · ersetzt Core" : offer.kind === "chip" && !existingChip && state.microchips.length >= 3 ? " · ersetzt Chip" : offer.kind === "die" && state.dice.length >= 7 ? " · ersetzt Würfel" : "";
           const editionBadge = offer.edition ? `<span class="edition-badge">${EDITIONS[offer.edition].symbol} ${EDITIONS[offer.edition].label}</span>` : "";
           const synergy = synergyDots(offer);
-          text.innerHTML = `<div class="offer-meta"><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span>${editionBadge}<span class="scale-badge scale-${scoreAxis}">${scoreAxisLabel(scoreAxis)}</span><span class="rarity-badge rarity-common">${labels[offer.kind] || offer.kind}${capacityHint}</span></div><h3>${escapeHtml(offer.name)}</h3><p>${escapeHtml(compactOfferDescription(offer))}</p><button class="synergy-badge synergy-button" type="button">${escapeHtml(synergy)}</button>`;
+          const chaseBadge = isChaseOffer(offer) ? `<span class="chase-badge">CHASE</span>` : "";
+          text.innerHTML = `<div class="offer-meta"><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span>${editionBadge}<span class="scale-badge scale-${scoreAxis}">${scoreAxisLabel(scoreAxis)}</span>${chaseBadge}</div><h3>${escapeHtml(offer.name)}</h3><p>${escapeHtml(compactOfferDescription(offer))}</p><button class="synergy-badge synergy-button" type="button">${escapeHtml(synergy)}</button>`;
           text.querySelector(".synergy-button").addEventListener("click", event => { event.stopPropagation(); openOfferSynergyDetail(offer); });
 
           const buy = document.createElement("button");
@@ -6225,12 +6351,17 @@
       }
 
       function detectBuildIdentity() {
-        const scores = { Pair:0, Sequence:0, Target:0, Parity:0, Power:0, Economy:0, Frozen:0, Pulse:0, Volatile:0, Diversity:0, Minimal:0 };
+        const scores = { Pair:0, Sequence:0, Target:0, Parity:0, Power:0, Signature:0, Economy:0, Frozen:0, Pulse:0, Volatile:0, Diversity:0, Minimal:0 };
         scores.Pair += comboLevel("pair") - 1 + modLevel("pair_protocol") + modLevel("pair_reactor") * 2 + chipLevel("pair_chip");
         scores.Sequence += comboLevel("straight") - 1 + modLevel("ladder") + modLevel("sequence_drive") * 2 + chipLevel("sequence_chip");
         scores.Target += comboLevel("target") - 1 + modLevel("target_matrix") * 2;
         scores.Parity += comboLevel("parity") - 1 + modLevel("parity_grid") * 2;
-        scores.Power += comboLevel("high") - 1 + modLevel("power_core") * 2;
+        scores.Power += comboLevel("high") - 1 + modLevel("power_core") * 2 + modLevel("overload") * 5;
+        scores.Pair += modLevel("mirror_core") * 5;
+        scores.Sequence += modLevel("perfect_line") * 5;
+        scores.Target += modLevel("dead_center") * 5;
+        scores.Parity += modLevel("binary_field") * 5;
+        scores.Signature = modLevel("full_set") + modLevel("diversity_engine") * 2 + modLevel("flow_memory") * 3 + modLevel("crown_protocol") * 5 + Math.min(4, (state.stats?.signatureCounts?.full_house || 0) + (state.stats?.signatureCounts?.perfect_split || 0) + (state.stats?.signatureCounts?.double_exact || 0));
         scores.Economy += modLevel("banker") + modLevel("dividends") + modLevel("greed_engine") * 2 + modLevel("venture") * 3 + state.bonds + chipLevel("savings_chip");
         scores.Frozen += modLevel("cryobank") * 2 + modLevel("frozen_income") + chipLevel("frozen_chip") + state.dice.filter(die => die.type === "frost").length;
         scores.Pulse += modLevel("pulse_reactor") * 2 + modLevel("second_pulse") * 3 + chipLevel("pulse_chip") + state.dice.filter(die => die.type === "pulse").length;
@@ -6461,7 +6592,7 @@
         const avg = state.stats.hands ? Math.round(state.stats.totalScore / state.stats.hands) : 0;
         return {
           schemaVersion:4,
-          gameVersion:"1.7",
+          gameVersion:"1.8",
           date:new Date().toISOString(),
           durationSeconds:state.runStartedAt ? Math.round((Date.now() - state.runStartedAt) / 1000) : null,
           startSet:state.startSet,
@@ -6646,6 +6777,7 @@
       $("bossStatusBtn").addEventListener("click", openBossDetail);
       $("contractStatusBtn").addEventListener("click", openContractDetail);
       $("buildStatusBtn").addEventListener("click", openBuildCompass);
+      $("archetypeSlot").addEventListener("click", openBuildCompass);
       $("programStatusBtn").addEventListener("click", openProgramsDetail);
       $("flowStrip").addEventListener("click", openFlowDetail);
       $("pulseBtn").addEventListener("click", openPulseDetail);
@@ -6671,7 +6803,7 @@
       $("collectionTabBtn").addEventListener("click", () => { codexTab = "collection"; renderCodex(); });
       $("scoreSequence").addEventListener("click", event => { if (event.target.closest("button")) return; skipScoreAnimation = true; });
       $("scoreLedgerBtn").addEventListener("click", event => { event.stopPropagation(); openScoreLedger(); });
-      $("comboHint").addEventListener("click", openBuildCompass);
+      $("comboHint").classList.add("hidden");
       $("updateAppBtn").addEventListener("click", () => waitingServiceWorker?.postMessage({ type:"SKIP_WAITING" }));
       manageDialog.addEventListener("cancel", event => { if (state.pendingPack || $("closeManageBtn").disabled) event.preventDefault(); });
 
