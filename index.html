@@ -3182,6 +3182,350 @@
       #shopScreen .buy-btn { width: 52px; min-width: 52px; font-size: 11px; }
     }
 
+  
+
+    /* =========================================================
+       v1.9.1 — SCORE THEATRE + STATUS DOCK VISUAL HOTFIX
+       One authoritative layer for the two reported regressions.
+       ========================================================= */
+
+    /* The horizontal status scroller needs enough internal room for its
+       cartoon shadow. Without this, MODS / PROGRAMME looked cropped. */
+    #gameScreen:not(.hidden) {
+      grid-template-rows: 48px 10px 58px minmax(0, 1fr) 70px;
+    }
+    #gameScreen .status-dock {
+      height: 58px;
+      min-height: 58px;
+      padding: 0 1px 7px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      align-items: start;
+    }
+    #gameScreen .status-pill {
+      height: 48px;
+      min-height: 48px;
+      margin: 0;
+      box-shadow: 0 4px 0 rgba(23,23,27,.12);
+    }
+
+    /* Score theatre uses the same paper, outline, radius and shadow language
+       as the game board. No oversized empty simulation canvas. */
+    .score-sequence {
+      display: grid;
+      place-items: center;
+      padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+      background:
+        radial-gradient(circle at 12% 18%, rgba(82,214,164,.10) 0 46px, transparent 47px),
+        radial-gradient(circle at 91% 84%, rgba(193,83,237,.09) 0 58px, transparent 59px),
+        rgba(247,244,236,.985);
+    }
+    .score-sequence-card {
+      width: min(100%, 430px);
+      height: min(100%, 820px);
+      max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
+      padding: 12px;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 10px;
+      border: 2.5px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 7px 0 rgba(23,23,27,.14);
+      overflow: hidden;
+    }
+    .sequence-head {
+      min-height: 44px;
+      margin: 0;
+      padding: 0 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .sequence-head > div {
+      display: grid;
+      gap: 2px;
+    }
+    .sequence-head strong {
+      font-size: 17px;
+      letter-spacing: .06em;
+    }
+    .sequence-head span {
+      font-size: 9px;
+      letter-spacing: .08em;
+    }
+    .score-ledger-btn {
+      min-height: 38px;
+      height: 38px;
+      padding: 0 11px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: var(--yellow);
+      box-shadow: 0 3px 0 rgba(23,23,27,.12);
+      font-size: 9px;
+      font-weight: 1000;
+    }
+
+    .score-theatre {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      gap: 9px;
+      overflow: hidden;
+    }
+    .theatre-stage {
+      min-height: 0;
+      padding: 11px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto auto auto;
+      gap: 8px;
+      border: 2.5px solid var(--line);
+      border-radius: 21px;
+      background: var(--paper);
+      box-shadow: 0 4px 0 rgba(23,23,27,.10);
+      overflow: visible;
+    }
+    .theatre-head {
+      grid-column: 1 / -1;
+      min-height: 37px;
+      padding: 0 2px 7px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 2px dashed rgba(23,23,27,.14);
+    }
+    .theatre-head span {
+      font-size: 9px;
+      letter-spacing: .09em;
+    }
+    .theatre-head strong {
+      max-width: 68%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 16px;
+      text-align: right;
+    }
+    .theatre-math {
+      grid-column: 1 / -1;
+      min-height: 0;
+      max-height: none;
+      display: grid;
+      gap: 7px;
+      overflow: visible;
+    }
+    .math-line {
+      min-height: 43px;
+      padding: 6px 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 2px solid var(--line);
+      border-left-width: 6px;
+      border-radius: 13px;
+      background: white;
+      box-shadow: 0 3px 0 rgba(23,23,27,.08);
+    }
+    .math-line.combo { border-left-color: var(--blue); background:#edf8ff; }
+    .math-line.add, .math-line.bonus { border-left-color: var(--violet); background:#f4eeff; }
+    .math-line.mult, .math-line.signature { border-left-color: var(--mint); background:#eafff6; }
+    .math-line.penalty { border-left-color: var(--pink); background:#ffeaf0; }
+    .math-line.result, .math-line.totalrow { border-left-color: var(--yellow); background:#fff7cf; }
+    .math-line small {
+      font-size: 8px;
+      letter-spacing: .08em;
+    }
+    .math-line b {
+      font-size: 18px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .theatre-result,
+    .theatre-progress {
+      min-height: 76px;
+      padding: 9px 10px;
+      border: 2px solid var(--line);
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 3px 0 rgba(23,23,27,.08);
+    }
+    .theatre-result {
+      display: grid;
+      align-content: space-between;
+      align-items: unset;
+      border-left: 6px solid var(--yellow);
+    }
+    .theatre-result strong {
+      font-size: 31px;
+      line-height: 1;
+      text-align: right;
+    }
+    .theatre-progress {
+      display: grid;
+      align-content: space-between;
+      gap: 5px;
+      border-left: 6px solid var(--pink);
+    }
+    .theatre-progress strong {
+      font-size: 14px;
+      line-height: 1;
+    }
+    .theatre-progress-bar {
+      height: 11px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      background: white;
+    }
+
+    .sequence-history-head {
+      min-height: 24px;
+      padding: 0 2px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 1000;
+      letter-spacing: .08em;
+    }
+    .sequence-history-head small {
+      max-width: 64%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 8px;
+      text-align: right;
+    }
+    .sequence-rows {
+      min-height: 0;
+      max-height: none;
+      padding: 2px 2px 5px;
+      display: grid;
+      align-content: start;
+      gap: 7px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+    }
+    .sequence-rows::-webkit-scrollbar { display:none; }
+    .sequence-row {
+      min-height: 54px;
+      padding: 7px 9px;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 8px;
+      border: 2px solid var(--line);
+      border-left-width: 6px;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 3px 0 rgba(23,23,27,.09);
+      overflow: hidden;
+    }
+    .sequence-row.combo { border-left-color: var(--blue); background:#edf8ff; }
+    .sequence-row.add, .sequence-row.bonus { border-left-color: var(--violet); background:#f4eeff; }
+    .sequence-row.mult, .sequence-row.signature { border-left-color: var(--mint); background:#eafff6; }
+    .sequence-row.penalty { border-left-color: var(--pink); background:#ffeaf0; }
+    .sequence-row.totalrow { border-left-color: var(--yellow); background:#fff7cf; }
+    .sequence-row.previous { opacity:.72; }
+    .sequence-row.active {
+      opacity: 1;
+      transform: none;
+      box-shadow: 0 4px 0 rgba(23,23,27,.12);
+    }
+    .sequence-row.next { display:none; }
+    .sequence-icon {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--line);
+      border-radius: 10px;
+      background: white;
+    }
+    .sequence-row strong {
+      font-size: 11px;
+      line-height: 1.1;
+    }
+    .sequence-row small {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 8px;
+      line-height: 1.2;
+    }
+    .sequence-value b { font-size: 17px; }
+    .sequence-value em { font-size: 8px; }
+    .sequence-summary {
+      width: 100%;
+      min-height: 38px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: #f2efe8;
+      box-shadow: 0 2px 0 rgba(23,23,27,.08);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 950;
+      cursor: pointer;
+    }
+    .sequence-summary b { color: var(--ink); font-size: 12px; }
+
+    @media (max-height: 760px) {
+      #gameScreen:not(.hidden) {
+        grid-template-rows: 44px 8px 52px minmax(0,1fr) 62px;
+      }
+      #gameScreen .status-dock {
+        height: 52px;
+        min-height: 52px;
+        padding-bottom: 6px;
+      }
+      #gameScreen .status-pill {
+        height: 43px;
+        min-height: 43px;
+      }
+      .score-sequence-card {
+        padding: 9px;
+        gap: 7px;
+      }
+      .sequence-head { min-height: 38px; }
+      .score-theatre { gap: 6px; }
+      .theatre-stage { padding: 8px; gap: 6px; }
+      .theatre-head { min-height: 31px; padding-bottom: 5px; }
+      .math-line { min-height: 36px; padding: 4px 7px; }
+      .theatre-result, .theatre-progress { min-height: 61px; padding: 7px 8px; }
+      .theatre-result strong { font-size: 26px; }
+      .sequence-history-head { min-height: 20px; }
+      .sequence-row { min-height: 47px; padding: 5px 7px; }
+      .sequence-icon { width: 29px; height: 29px; }
+    }
+
+  
+    /* v1.9.1 compact score panel: content-led height, internal scroll only. */
+    .score-sequence-card {
+      height: auto;
+      min-height: 0;
+      max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
+    }
+    .score-theatre {
+      grid-template-rows: auto auto auto;
+    }
+    .theatre-math {
+      max-height: 230px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+    }
+    .theatre-math::-webkit-scrollbar { display:none; }
+    .sequence-rows {
+      max-height: 170px;
+    }
+    @media (max-height: 760px) {
+      .theatre-math { max-height: 170px; }
+      .sequence-rows { max-height: 142px; }
+    }
+
   </style>
 </head>
 <body>
@@ -5541,21 +5885,24 @@
       function renderScoreHistory(sequence, currentIndex) {
         const rows = $("sequenceRows");
         if (!rows) return;
-        const completed = sequence.slice(0, currentIndex);
-        const current = sequence[currentIndex];
-        const next = sequence[currentIndex + 1];
+        const safeIndex = Math.max(0, Math.min(currentIndex, sequence.length - 1));
+        const completed = sequence.slice(0, safeIndex);
+        const current = sequence[safeIndex];
         let markup = "";
         const hiddenCount = Math.max(0, completed.length - 1);
         if (hiddenCount > 0) {
           const hiddenScore = completed.slice(0, -1).reduce((sum, step) => sum + Math.max(0, Number(step.delta || 0)), 0);
-          markup += `<div class="sequence-summary"><span>${hiddenCount} vorherige Schritte</span><b>+${hiddenScore.toLocaleString("de-DE")}</b></div>`;
+          markup += `<button class="sequence-summary" type="button" data-open-score-ledger><span>${hiddenCount} frühere Schritte</span><b>+${hiddenScore.toLocaleString("de-DE")}</b></button>`;
         }
         const previous = completed.at(-1);
-        if (previous) markup += scoreRowMarkup(previous, "");
+        if (previous) markup += scoreRowMarkup(previous, "previous");
         if (current) markup += scoreRowMarkup(current, "active");
-        if (next && !previous) markup += scoreRowMarkup(next, "next");
         rows.innerHTML = markup;
-        $("sequenceStepLabel").textContent = `Schritt ${Math.min(currentIndex + 1, sequence.length)} / ${sequence.length}`;
+        rows.querySelector("[data-open-score-ledger]")?.addEventListener("click", event => {
+          event.stopPropagation();
+          openScoreLedger();
+        });
+        $("sequenceStepLabel").textContent = `Schritt ${Math.min(safeIndex + 1, sequence.length)} / ${sequence.length}`;
       }
 
       function openScoreLedger() {
@@ -7631,7 +7978,7 @@
         const avg = state.stats.hands ? Math.round(state.stats.totalScore / state.stats.hands) : 0;
         return {
           schemaVersion:4,
-          gameVersion:"1.9",
+          gameVersion:"1.9.1",
           date:new Date().toISOString(),
           durationSeconds:state.runStartedAt ? Math.round((Date.now() - state.runStartedAt) / 1000) : null,
           startSet:state.startSet,

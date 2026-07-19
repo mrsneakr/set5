@@ -2,7 +2,7 @@
   "id": "./",
   "name": "SET/5 Dice Roguelite",
   "short_name": "SET/5",
-  "description": "SET/5 v1.9 – ein Dice-Roguelite mit vereinheitlichter Mobile-UI und vollständig geprüftem Shop.",
+  "description": "SET/5 v1.9.1 – Mobile Dice Roguelite mit bereinigtem Status-Dock und kompaktem Score Theatre.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",
