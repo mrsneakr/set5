@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <title>SET/5 v1.5 – Pull & Growth</title>
+  <title>SET/5 v1.6 – UX & Balance Calibration</title>
   <style>
     :root {
       --ink: #17171b;
@@ -1714,7 +1714,7 @@
     .pop { animation: pop .25s ease; }
   
 
-    /* v1.5: Item economy, pull kick, score axes and stakes */
+    /* v1.5 foundations: item economy, pull kick, score axes and stakes */
     .scale-badge {
       display:inline-flex; align-items:center; gap:4px;
       min-height:20px; padding:2px 7px;
@@ -1788,13 +1788,154 @@
     .stake-card small { display:block; color:var(--muted); font-size:9px; line-height:1.3; margin-top:3px; }
     .stake-chip { display:inline-flex; align-items:center; gap:5px; border:2px solid var(--line); border-radius:999px; background:#fff; padding:3px 8px; font-size:9px; font-weight:1000; }
 
+  
+    /* v1.6: compact, progressive disclosure */
+    .status-dock {
+      display:flex;
+      gap:6px;
+      overflow-x:auto;
+      scrollbar-width:none;
+      padding-bottom:2px;
+    }
+    .status-dock::-webkit-scrollbar { display:none; }
+    .status-pill {
+      flex:1 0 62px;
+      min-height:36px;
+      padding:4px 7px;
+      border-radius:13px;
+    }
+    .status-icon { font-size:14px; }
+    .status-text { font-size:8px; max-width:68px; }
+
+    .subline {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+    }
+    .substat {
+      min-height:43px;
+      padding:6px 9px;
+      border-radius:14px;
+    }
+    .substat-label { font-size:9px; }
+    .substat-main { justify-content:flex-start; gap:7px; }
+    .substat-value { font-size:21px; }
+    .substat-copy { display:none; }
+    .substat-pips { min-height:8px; }
+    .turn-pip { width:8px; height:8px; border-width:1.5px; }
+
+    .dice-grid { margin-bottom:7px; }
+    .combo-hint { min-height:34px; padding:5px 8px; margin-bottom:6px; }
+    .control-dock { margin-bottom:6px; }
+    .micro-control { min-height:34px; padding:5px 10px; }
+    .flow-strip { min-height:38px; border-radius:13px; padding:5px 8px; }
+
+    .groups { gap:5px; }
+    .group-card {
+      min-height:44px;
+      grid-template-columns:34px minmax(0,1fr) auto;
+      padding:5px 7px;
+      border-radius:14px;
+      gap:6px;
+      cursor:pointer;
+      transition:min-height .18s ease, background .18s ease;
+    }
+    .group-card.expanded { background:#fff; }
+    .group-title { width:27px; height:27px; border-radius:9px; font-size:9px; }
+    .group-header { display:block; }
+    .group-swap { display:none; }
+    .mini-dice { min-height:20px; flex-wrap:nowrap; overflow:hidden; }
+    .mini-die { width:21px; height:21px; font-size:11px; border-radius:7px; }
+    .combo-info { min-width:52px; }
+    .combo-name { font-size:8px; max-width:105px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .combo-score { font-size:16px; }
+    .group-detail {
+      grid-column:1 / -1;
+      display:none;
+      border-top:1.5px dashed rgba(23,23,27,.14);
+      padding:6px 2px 1px;
+      gap:6px;
+      align-items:center;
+      justify-content:space-between;
+      font-size:10px;
+      color:var(--muted);
+    }
+    .group-card.expanded .group-detail { display:flex; }
+    .group-formula { font-weight:900; color:var(--ink); }
+    .group-actions { display:flex; gap:5px; }
+    .group-action {
+      border:1.8px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      min-height:27px;
+      padding:3px 8px;
+      font-size:9px;
+      font-weight:1000;
+    }
+
+    .offer {
+      grid-template-columns:42px 1fr auto;
+      gap:8px;
+      padding:8px 46px 8px 8px;
+      min-height:92px;
+    }
+    .offer-icon { width:40px; height:40px; border-radius:13px; font-size:18px; }
+    .offer-meta { gap:3px; margin-bottom:3px; }
+    .offer .rarity-badge, .offer .scale-badge, .offer .edition-badge {
+      min-height:17px;
+      padding:1px 5px;
+      font-size:8px;
+    }
+    .offer h3 { font-size:13px; line-height:1.15; padding-right:0; }
+    .offer p {
+      margin:3px 0 0;
+      font-size:10px;
+      line-height:1.25;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      display:-webkit-box;
+      -webkit-line-clamp:1;
+      -webkit-box-orient:vertical;
+    }
+    .synergy-badge { margin-top:4px; font-size:8px; padding:2px 6px; }
+    .buy-btn { min-width:49px; min-height:35px; font-size:11px; }
+    .offer-lock { width:28px; height:28px; right:7px; top:7px; border-radius:9px; }
+    .shop-header p { font-size:11px; }
+    .shop-preview { font-size:10px; padding:6px 8px; }
+
+    .scaling-slot {
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 8px;
+      border:2px solid rgba(23,23,27,.10);
+      border-radius:12px;
+      background:#f3edff;
+      font-size:9px;
+      font-weight:1000;
+      text-transform:uppercase;
+    }
+    .scaling-slot strong { color:var(--ink); }
+
+    .support-stack {
+      border-left-color:var(--violet) !important;
+      background:#f5efff !important;
+    }
+
+    @media (max-width:380px) {
+      .status-text { display:none; }
+      .status-pill { flex-basis:44px; }
+      .offer-meta .rarity-common { display:none; }
+      .combo-name { max-width:82px; }
+    }
+
   </style>
 </head>
 <body>
   <main class="app">
     <section id="introScreen" class="screen-card">
       <div class="brand">SET<span>/5</span></div>
-      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v0.9</small></h1>
+      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.6</small></h1>
       <p>Wirf, halte und teile deine Würfel in bis zu drei Gruppen. Baue im Shop einen Run, der immer stärker und seltsamer wird.</p>
 
       <div class="intro-steps">
@@ -1970,6 +2111,7 @@
           <div class="round-label">Runde geschafft</div>
           <h2>SHOP</h2>
           <p id="shopSummary">Baue deinen Run weiter aus.</p>
+          <div id="scalingSlot" class="scaling-slot"><span>∞</span><strong>Scaling: frei</strong></div>
           <div id="shopEconomy" class="shop-economy"></div>
         </header>
         <div id="shopOffers" class="shop-grid"></div>
@@ -2060,7 +2202,7 @@
       <p>Unterschiedliche echte Kombos in G1 → G2 → G3 bauen Flow auf. Exact 10 ist ein Connector und verstärkt die folgende andere Kombo. Pulse verändert einmal pro Runde einen Würfel.</p>
       <p>Rundentypen können eine bestimmte Kombo, eine Kette oder vier Survival-Züge verlangen. NO DUPES entfernt Paare und Drillinge vollständig.</p>
       <h3>Shop und Wachstum</h3>
-      <p>● Common, ◆ Uncommon, ★ Rare und ✦ Legendary zeigen die Seltenheit. Du startest mit vier Core-Slots und kannst bis sieben erweitern. Duplikate leveln vorhandene Mods. Rare Engines multiplizieren den gesamten Score; Zinsen belohnen gesparte Coins.</p>
+      <p>● Common, ◆ Uncommon, ★ Rare und ✦ Legendary zeigen die Seltenheit. Shopkarten zeigen nur die Kernidee; tippe das Symbol für die vollständige Formel. Duplikate leveln vorhandene Mods. Pro Run ist nur eine unbegrenzt skalierende Haupt-Engine aktiv.</p>
       <button id="closeHelpBtn" class="close-dialog">VERSTANDEN</button>
     </div>
   </dialog>
@@ -2313,6 +2455,8 @@
       const ACTIVE_ITEM_IDS = new Set(["battery","extra_turn","shield"]);
       const ACTIVE_TRAIT_IDS = new Set(["overcharged","cursed"]);
 
+      const SCALING_ENGINE_IDS = new Set(["perfect_machine","momentum","venture","flow_memory","reserve_spiral"]);
+
       const LEGACY_CHIP_TO_MOD = {
         six_chip:"full_set", high_chip:"power_core", frozen_chip:"cryobank", pulse_chip:"pulse_reactor",
         clean_chip:"lean_machine", savings_chip:"banker", pair_chip:"pair_reactor", sequence_chip:"sequence_drive",
@@ -2411,7 +2555,7 @@
         ["Data", "Meta-Währung aus abgeschlossenen Runs. Sie schaltet Startsets und später neue Inhalte frei, aber keine permanenten Stats."]
       ];
 
-      const SAVE_VERSION = 13;
+      const SAVE_VERSION = 16;
       const META_DEFAULTS = {
         version:9,
         data:0,
@@ -2443,12 +2587,12 @@
       let nextDieId = 1;
       let toastTimer = null;
       let audioContext = null;
-      const SAVE_KEY = "set5_run_v13";
-      const LEGACY_SAVE_KEYS = ["set5_run_v09", "set5_run_v08", "set5_run_v07", "set5_run_v06", "set5_run_v05"];
-      const SETTINGS_KEY = "set5_settings_v13";
-      const LEGACY_SETTINGS_KEYS = ["set5_settings_v09", "set5_settings_v08", "set5_settings_v07", "set5_settings_v06"];
-      const META_KEY = "set5_meta_v13";
-      const LEGACY_META_KEYS = ["set5_meta_v09", "set5_meta_v08"];
+      const SAVE_KEY = "set5_run_v16";
+      const LEGACY_SAVE_KEYS = ["set5_run_v13","set5_run_v09", "set5_run_v08", "set5_run_v07", "set5_run_v06", "set5_run_v05"];
+      const SETTINGS_KEY = "set5_settings_v16";
+      const LEGACY_SETTINGS_KEYS = ["set5_settings_v13","set5_settings_v09", "set5_settings_v08", "set5_settings_v07", "set5_settings_v06"];
+      const META_KEY = "set5_meta_v16";
+      const LEGACY_META_KEYS = ["set5_meta_v13","set5_meta_v09", "set5_meta_v08"];
       const TUTORIAL_KEY = "set5_tutorial_done";
       let settings = loadSettings();
       let meta = loadMeta();
@@ -2660,6 +2804,8 @@
         migrated.shopsSinceRare ||= 0;
         migrated.lastShopHadRare ||= false;
         migrated.legendaryOwned ||= migrated.mods?.some(mod => mod.rarity === "experimental") || false;
+        migrated.scalingAmplifier = Number(migrated.scalingAmplifier || 0);
+        migrated.expandedGroup = Number(migrated.expandedGroup || 0);
         migrated.pendingPack = null;
         migrated.isRolling = false;
         migrated.isScoring = false;
@@ -2821,6 +2967,30 @@
 
       function hasLegendary() {
         return state.mods.some(mod => mod.rarity === "experimental");
+      }
+
+      function isScalingEngine(id) {
+        return SCALING_ENGINE_IDS.has(id);
+      }
+
+      function currentScalingEngine() {
+        return state.mods.find(mod => isScalingEngine(mod.id)) || null;
+      }
+
+      function compactOfferDescription(offer) {
+        const text = String(offer?.desc || "").replace(/\s+/g, " ").trim();
+        if (!text) return "Details öffnen";
+        const first = text.split(/(?<=[.!?])\s+/)[0];
+        return first.length > 72 ? `${first.slice(0, 69).trim()}…` : first;
+      }
+
+      function synergyDots(offer) {
+        const build = detectBuildIdentity();
+        const tags = offerSynergyTags(offer);
+        const matches = tags.filter(tag => build.includes(tag)).length;
+        const level = Math.max(0, Math.min(3, matches || (tags.length ? 1 : 0)));
+        const dots = `${"●".repeat(level)}${"○".repeat(3-level)}`;
+        return tags.length ? `${dots} ${matches ? "Synergy" : "Side Path"}` : "○○○ Utility";
       }
 
       function scoreAxisForOffer(offer) {
@@ -3085,7 +3255,9 @@
           stake: Number(meta.selectedStake || 0),
           shopsSinceRare: 0,
           lastShopHadRare: false,
-          legendaryOwned: false
+          legendaryOwned: false,
+          scalingAmplifier: 0,
+          expandedGroup: 0
         });
         if (!state.rngState) state.rngState = state.seed;
         state.stats.startSet = set.id;
@@ -3722,6 +3894,7 @@
           .filter(mod => mod.edition === "neon")
           .reduce((factor, mod) => factor * Math.pow(1.12, mod.level), 1);
         if (neonFactor > 1) addEngine("Neon Edition", neonFactor);
+        if (currentScalingEngine() && state.scalingAmplifier > 0) addEngine("Scaling Amplifier", 1 + state.scalingAmplifier);
 
         if (state.boss?.id === "null" && grouped.some(die => die.value === 0)) {
           engineFactor *= .50;
@@ -3803,10 +3976,50 @@
         render();
       }
 
+      function aggregateSmallScoreSteps(sequence) {
+        const result = [];
+        let bucket = [];
+        const flush = () => {
+          if (!bucket.length) return;
+          if (bucket.length === 1) {
+            result.push(bucket[0]);
+          } else {
+            const first = bucket[0];
+            const last = bucket[bucket.length - 1];
+            const delta = bucket.reduce((sum, step) => sum + Number(step.delta || 0), 0);
+            result.push({
+              cls:"bonus support-stack",
+              icon:"+",
+              title:"Support Bonuses",
+              detail:bucket.map(step => step.title).join(" · "),
+              delta,
+              before:first.before,
+              after:last.after,
+              stageEyebrow:"SUPPORT",
+              stageTitle:"Kleine Boni gebündelt",
+              stageFormula:[
+                { label:"Vorher", value:first.before, kind:"bonus" },
+                { label:"Support", value:`+${delta.toLocaleString("de-DE")}`, kind:"bonus" },
+                { label:"Neue Summe", value:last.after, kind:"result" }
+              ],
+              tag:"Gebündelt"
+            });
+          }
+          bucket = [];
+        };
+        sequence.forEach(step => {
+          const small = ["bonus","add"].includes(step.cls) && !step.impact && Math.abs(Number(step.delta || 0)) < 45 && step.title !== "Rundenziel";
+          if (small) bucket.push(step);
+          else { flush(); result.push(step); }
+        });
+        flush();
+        return result;
+      }
+
       async function runScoreAnimation(preview) {
         skipScoreAnimation = false;
         const reduced = settings.animation === 'off' || window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-        const sequence = buildScoreSequence(preview);
+        const sequence = aggregateSmallScoreSteps(buildScoreSequence(preview));
         const rows = $('sequenceRows');
         const total = $('sequenceTotal');
         const overlay = $('scoreSequence');
@@ -4338,6 +4551,50 @@
         renderShop();
       }
 
+      function openScalingEngineChoice(offer) {
+        const current = currentScalingEngine();
+        if (!current) return false;
+        openDetail("Scaling Engine", `
+          <div class="dialog-note">Pro Run ist nur eine unbegrenzt skalierende Haupt-Engine aktiv. Wähle bewusst.</div>
+          <div class="detail-list">
+            <div class="detail-row"><div><strong>AKTUELL · ${escapeHtml(current.name)}</strong><small>${escapeHtml(current.desc)}</small></div><b>L${current.level}</b></div>
+            <div class="detail-row"><div><strong>NEU · ${escapeHtml(offer.name)}</strong><small>${escapeHtml(offer.desc)}</small></div><b>${offer.price} ●</b></div>
+          </div>
+          <div class="dialog-actions">
+            <button id="replaceScalingBtn" class="primary-btn" type="button">ERSETZEN</button>
+            <button id="amplifyScalingBtn" class="secondary-btn" type="button">AKTUELLE VERSTÄRKEN</button>
+          </div>
+        `);
+        $("replaceScalingBtn").addEventListener("click", () => {
+          if (state.coins < offer.price) return;
+          const index = state.mods.findIndex(mod => mod.id === current.id);
+          const backup = index >= 0 ? state.mods[index] : null;
+          if (index >= 0) state.mods.splice(index, 1);
+          state.legendaryOwned = state.mods.some(mod => mod.rarity === "experimental");
+          const ok = completePurchase(offer);
+          if (!ok && backup) state.mods.push(backup);
+          $("detailDialog").close();
+          render();
+        });
+        $("amplifyScalingBtn").addEventListener("click", () => {
+          if (state.coins < offer.price || offer.purchased) return;
+          state.coins -= offer.price;
+          state.stats.coinsSpent += offer.price;
+          state.stats.purchases++;
+          state.stats.upgrades++;
+          offer.purchased = true;
+          const upgradedLevel = current.level < current.maxLevel;
+          if (upgradedLevel) current.level++;
+          else state.scalingAmplifier = Math.min(.50, state.scalingAmplifier + .10);
+          playSound("buy");
+          vibrate(24);
+          $("detailDialog").close();
+          showToast(upgradedLevel ? `${current.name} L${current.level}` : `Scaling Amplifier +0,10`);
+          render();
+        });
+        return true;
+      }
+
       function addOrUpgradeMod(base, edition = null) {
         const existing = getMod(base.id);
         if (base.rarity === "experimental" && !existing && hasLegendary()) {
@@ -4375,7 +4632,6 @@
         }
         const existingMod = offer.kind === "mod" ? getMod(offer.id) : null;
         const existingChip = offer.kind === "chip" ? getChip(offer.id) : null;
-
         if (offer.kind === "mod" && !existingMod && offer.edition !== "compact" && coreModCount() >= state.modSlots) {
           const index = state.mods.findIndex(mod => mod.id === replacementId && mod.edition !== "compact");
           if (index < 0) return false;
@@ -4440,6 +4696,10 @@
         if (state.coins < offer.price) { showToast("Nicht genug Coins."); return; }
         const existingMod = offer.kind === "mod" ? getMod(offer.id) : null;
         const existingChip = offer.kind === "chip" ? getChip(offer.id) : null;
+        if (offer.kind === "mod" && isScalingEngine(offer.id) && currentScalingEngine() && currentScalingEngine().id !== offer.id) {
+          openScalingEngineChoice(offer);
+          return;
+        }
 
         if (offer.kind === "mod" && !existingMod && offer.edition !== "compact" && coreModCount() >= state.modSlots) {
           openReplacementDialog("mod", offer); return;
@@ -4869,7 +5129,8 @@
             ${flipButton}
           </div>`;
         }).join("");
-        openDetail("Pulse", `<div class="dialog-note">Einmal pro Runde darfst du genau einen Würfel um ±1 verändern. Flip-Würfel besitzen zusätzlich ihre eigene einmalige Spiegelung.</div><div class="detail-list">${rows}</div>`);
+        const pulseEngine = hasMod("pulse_reactor") ? ` · Pulse Reactor L${modLevel("pulse_reactor")}` : "";
+        openDetail("Pulse", `<div class="dialog-note">Eine Ressource, eine klare Aufgabe: Standardwürfel ±1, Pulse-Würfel ±2${pulseEngine}. Keine zweite Manipulationswährung.</div><div class="detail-list">${rows}</div>`);
         $("detailBody").querySelectorAll(".pulse-minus").forEach(button => button.addEventListener("click", () => usePulse(Number(button.dataset.dieId), -1)));
         $("detailBody").querySelectorAll(".pulse-plus").forEach(button => button.addEventListener("click", () => usePulse(Number(button.dataset.dieId), 1)));
         $("detailBody").querySelectorAll(".pulse-flip").forEach(button => button.addEventListener("click", () => flipDie(Number(button.dataset.dieId))));
@@ -5106,7 +5367,7 @@
       function renderGame() {
         const setNumber = Math.ceil(state.round / 3);
         const mode = state.boss ? "Boss" : state.encounter?.name || "Score";
-        $("roundLabel").textContent = `Set ${setNumber} · ${mode}`;
+        $("roundLabel").textContent = `Set ${setNumber} · ${mode}${activeStake().id ? ` · S${activeStake().id}` : ""}`;
         $("scoreValue").textContent = state.score.toLocaleString("de-DE");
         $("targetValue").textContent = state.target.toLocaleString("de-DE");
         $("coinValue").textContent = state.coins;
@@ -5132,10 +5393,10 @@
         }
 
         const identity = detectBuildIdentity()[0];
-        $("buildShort").textContent = identity ? `${identity.toUpperCase()} · ${coreModCount()}/${state.modSlots}` : `${coreModCount()}/${state.modSlots} CORE`;
+        $("buildShort").textContent = `${coreModCount()}/${state.modSlots}${identity ? ` · ${identity.slice(0,4).toUpperCase()}` : ""}`;
         const upgradedPrograms = PROGRAMS.filter(program => comboLevel(program.id) > 1);
         const highestProgram = Math.max(1, ...PROGRAMS.map(program => comboLevel(program.id)));
-        $("programShort").textContent = upgradedPrograms.length ? `${upgradedPrograms.length} LABS · L${highestProgram}` : "PROGRAMME";
+        $("programShort").textContent = `L${highestProgram}${upgradedPrograms.length ? ` · ${upgradedPrograms.length}` : ""}`;
 
         renderDice();
         renderGroupPicker();
@@ -5313,54 +5574,68 @@
       }
 
       function renderGroups(preview = previewHand()) {
-        const groups = $('groups');
-        groups.innerHTML = '';
+        const groups = $("groups");
+        groups.innerHTML = "";
 
         preview.evals.forEach((result, index) => {
           const groupIndex = index + 1;
-          const card = document.createElement('div');
-          card.className = `group-card ${groupIndex > maxGroups() ? 'disabled' : ''} ${state.selectedDieId && groupIndex <= maxGroups() ? 'assignable' : ''}`;
+          const card = document.createElement("div");
+          const expanded = state.expandedGroup === groupIndex;
+          card.className = `group-card ${expanded ? "expanded" : ""} ${groupIndex > maxGroups() ? "disabled" : ""} ${state.selectedDieId && groupIndex <= maxGroups() ? "assignable" : ""}`;
           card.dataset.groupIndex = groupIndex;
-          card.addEventListener('click', () => { if (state.selectedDieId) assignSelectedDie(groupIndex); });
+          card.addEventListener("click", () => {
+            if (state.selectedDieId) assignSelectedDie(groupIndex);
+            else {
+              state.expandedGroup = expanded ? 0 : groupIndex;
+              renderGroups(previewHand());
+            }
+          });
 
-          const header = document.createElement('div');
-          header.className = 'group-header';
-          const title = document.createElement('div');
-          title.className = 'group-title';
+          const title = document.createElement("div");
+          title.className = "group-title";
           title.textContent = `G${groupIndex}`;
-          header.appendChild(title);
-          if (groupIndex < maxGroups()) {
-            const swap = document.createElement('button');
-            swap.className = 'group-swap';
-            swap.type = 'button';
-            swap.textContent = `↔ G${groupIndex + 1}`;
-            swap.disabled = !state.turnRolled;
-            swap.addEventListener('click', event => { event.stopPropagation(); swapGroups(groupIndex, groupIndex + 1); });
-            header.appendChild(swap);
-          }
 
-          const miniDice = document.createElement('div');
-          miniDice.className = 'mini-dice';
+          const miniDice = document.createElement("div");
+          miniDice.className = "mini-dice";
           if (result.dice?.length) {
             result.dice.forEach(die => {
-              const mini = document.createElement('div');
+              const mini = document.createElement("div");
               mini.className = `mini-die type-${die.type}`;
               mini.textContent = die.value;
               miniDice.appendChild(mini);
             });
           } else {
-            const helper = groupIndex > maxGroups() ? '−' : '+';
-            miniDice.innerHTML = `<span style="color:var(--muted);font-size:20px;font-weight:900;line-height:1">${helper}</span>`;
+            miniDice.innerHTML = `<span style="color:var(--muted);font-size:18px;font-weight:900">+</span>`;
           }
 
-          const info = document.createElement('div');
-          info.className = 'combo-info';
-          const levelText = isQualified(result) && result.level > 1 ? ` L${result.level}` : '';
-          const flowText = result.flowFactor > 1 ? ` ×${result.flowFactor.toFixed(2).replace('.', ',')}` : '';
-          const icon = COMBO_ICONS[result.type] || '·';
-          info.innerHTML = `<div class="combo-name">${escapeHtml(icon)} ${escapeHtml(result.name)}${levelText}${flowText}</div><div class="combo-score">${(result.scoredTotal ?? result.total).toLocaleString('de-DE')}</div>`;
+          const info = document.createElement("div");
+          info.className = "combo-info";
+          const levelText = isQualified(result) && result.level > 1 ? ` L${result.level}` : "";
+          const flowText = result.flowFactor > 1 ? ` ×${result.flowFactor.toFixed(2).replace(".", ",")}` : "";
+          const icon = COMBO_ICONS[result.type] || "·";
+          info.innerHTML = `<div class="combo-name">${escapeHtml(icon)} ${escapeHtml(result.name)}${levelText}${flowText}</div><div class="combo-score">${(result.scoredTotal ?? result.total).toLocaleString("de-DE")}</div>`;
 
-          card.append(header, miniDice, info);
+          const detail = document.createElement("div");
+          detail.className = "group-detail";
+          const formula = result.total > 0
+            ? `${Math.round(result.chips)} C × ${result.mult.toFixed(2).replace(".", ",")} M${result.flowFactor > 1 ? ` × ${result.flowFactor.toFixed(2).replace(".", ",")} Flow` : ""}`
+            : "Würfel durch Antippen zuweisen";
+          detail.innerHTML = `<span class="group-formula">${escapeHtml(formula)}</span><span class="group-actions"></span>`;
+          const actions = detail.querySelector(".group-actions");
+          if (groupIndex > 1) {
+            const up = document.createElement("button");
+            up.type = "button"; up.className = "group-action"; up.textContent = `← G${groupIndex - 1}`;
+            up.addEventListener("click", event => { event.stopPropagation(); swapGroups(groupIndex - 1, groupIndex); });
+            actions.appendChild(up);
+          }
+          if (groupIndex < maxGroups()) {
+            const down = document.createElement("button");
+            down.type = "button"; down.className = "group-action"; down.textContent = `G${groupIndex + 1} →`;
+            down.addEventListener("click", event => { event.stopPropagation(); swapGroups(groupIndex, groupIndex + 1); });
+            actions.appendChild(down);
+          }
+
+          card.append(title, miniDice, info, detail);
           groups.appendChild(card);
         });
       }
@@ -5371,7 +5646,11 @@
         const eventBadge = state.shopEvent ? `<span class="shop-event">${state.shopEvent.icon} ${state.shopEvent.name}</span>` : "";
         const bossPreview = state.queuedBoss ? `<span class="shop-preview"><span>${escapeHtml(state.queuedBoss.icon || '⚠')}</span><span><strong>Nächste Runde: ${escapeHtml(state.queuedBoss.name)}</strong><br><span>${escapeHtml(state.queuedBoss.desc || 'Bossregel aktiv.')}</span></span></span>` : '';
         $("shopSummary").innerHTML = `Runde ${state.round} · ${state.coins} Coins · Angebote können gesperrt werden ${eventBadge}${bossPreview}`;
-        $("shopEconomy").innerHTML = `<strong>+${economy.total} ●</strong><span>Basis ${economy.base} · Zins ${economy.interest}/${interestCap()} · Dividende ${economy.dividends} · Bonds ${economy.bonds || 0} · Frost ${economy.frozen || 0}</span>`;
+        $("shopEconomy").innerHTML = `<strong>+${economy.total} ●</strong><span>Basis ${economy.base} · Zins ${economy.interest}/${interestCap()} · Extras ${(economy.dividends || 0) + (economy.bonds || 0) + (economy.frozen || 0)}</span>`;
+        const scaling = currentScalingEngine();
+        $("scalingSlot").innerHTML = scaling
+          ? `<span>∞</span><strong>${escapeHtml(scaling.name)} L${scaling.level}${state.scalingAmplifier ? ` · +${Math.round(state.scalingAmplifier * 100)} %` : ""}</strong>`
+          : `<span>∞</span><strong>Scaling Slot frei</strong>`;
 
         const container = $("shopOffers");
         container.innerHTML = "";
@@ -5394,8 +5673,8 @@
           const existingChip = offer.kind === "chip" ? getChip(offer.id) : null;
           const capacityHint = offer.kind === "mod" && !existingMod && offer.edition !== "compact" && coreModCount() >= state.modSlots ? " · ersetzt Core" : offer.kind === "chip" && !existingChip && state.microchips.length >= 3 ? " · ersetzt Chip" : offer.kind === "die" && state.dice.length >= 7 ? " · ersetzt Würfel" : "";
           const editionBadge = offer.edition ? `<span class="edition-badge">${EDITIONS[offer.edition].symbol} ${EDITIONS[offer.edition].label}</span>` : "";
-          const synergy = describeOfferSynergy(offer);
-          text.innerHTML = `<div class="offer-meta"><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span>${editionBadge}<span class="scale-badge scale-${scoreAxis}">${scoreAxisLabel(scoreAxis)}</span><span class="rarity-badge rarity-common">${labels[offer.kind] || offer.kind}${capacityHint}</span></div><h3>${escapeHtml(offer.name)}</h3><p>${escapeHtml(offer.desc)}</p>${synergy ? `<div class="synergy-badge">${escapeHtml(synergy)}</div>` : ''}`;
+          const synergy = synergyDots(offer);
+          text.innerHTML = `<div class="offer-meta"><span class="rarity-badge rarity-${rarity.id}">${rarity.symbol} ${rarity.label}</span>${editionBadge}<span class="scale-badge scale-${scoreAxis}">${scoreAxisLabel(scoreAxis)}</span><span class="rarity-badge rarity-common">${labels[offer.kind] || offer.kind}${capacityHint}</span></div><h3>${escapeHtml(offer.name)}</h3><p>${escapeHtml(compactOfferDescription(offer))}</p><div class="synergy-badge">${escapeHtml(synergy)}</div>`;
 
           const buy = document.createElement("button");
           buy.className = "buy-btn"; buy.type = "button"; buy.disabled = offer.purchased || state.coins < offer.price;
@@ -5785,7 +6064,7 @@
         const avg = state.stats.hands ? Math.round(state.stats.totalScore / state.stats.hands) : 0;
         return {
           schemaVersion:3,
-          gameVersion:"1.5",
+          gameVersion:"1.6",
           date:new Date().toISOString(),
           durationSeconds:state.runStartedAt ? Math.round((Date.now() - state.runStartedAt) / 1000) : null,
           startSet:state.startSet,
