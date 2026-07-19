@@ -2,7 +2,7 @@
   "id": "./",
   "name": "SET/5 Dice Roguelite",
   "short_name": "SET/5",
-  "description": "Ein minimalistisches Dice-Roguelite mit klarem One-Screen-Layout und suchbaren Build-Archetypen.",
+  "description": "SET/5 v1.8.1 – One-Screen Dice Roguelite mit Archetypen und Rendering-Hotfix.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",

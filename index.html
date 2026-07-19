@@ -6042,6 +6042,149 @@
         });
       }
 
+
+      function renderGame() {
+        const setNumber = Math.ceil(state.round / 3);
+        const mode = state.boss ? "Boss" : state.encounter?.name || `Runde ${state.round}`;
+        $("roundLabel").textContent = `Set ${setNumber} · ${mode}${activeStake().id ? ` · S${activeStake().id}` : ""}`;
+        $("scoreValue").textContent = state.score.toLocaleString("de-DE");
+        $("targetValue").textContent = state.target.toLocaleString("de-DE");
+        $("coinValue").textContent = state.coins;
+        $("progressBar").style.width = `${Math.min(100, (state.score / state.target) * 100)}%`;
+
+        const preview = previewHand();
+
+        $("bossStatusBtn").classList.toggle("hidden", !state.boss);
+        if (state.boss) {
+          $("bossShort").textContent = state.boss.name;
+          $("bossStatusBtn").querySelector(".status-icon").innerHTML = gameIcon("boss");
+        }
+
+        const showEncounter = state.encounter && !["score", "boss"].includes(state.encounter.id);
+        const challenge = showEncounter ? state.encounter : state.contract;
+        const challengeMet = showEncounter ? preview.encounterMet : preview.contractMet;
+        $("contractStatusBtn").classList.toggle("hidden", !challenge);
+        if (challenge) {
+          $("contractIcon").innerHTML = gameIcon(showEncounter ? "target" : "signature");
+          $("contractShort").textContent = challenge.name;
+          $("contractDot").className = `status-dot ${challengeMet ? "met" : ""}`;
+          $("contractStatusBtn").setAttribute("aria-label", `${challenge.name}: ${challengeMet ? "erfüllt" : "offen"}`);
+        }
+
+        const archetype = activeArchetype();
+        $("buildStatusBtn").querySelector(".status-icon").innerHTML = gameIcon(archetype.icon || "build");
+        $("buildShort").textContent = coreModCount() ? `${archetype.label.toUpperCase()} · ${coreModCount()}/${state.modSlots}` : `${coreModCount()}/${state.modSlots} MODS`;
+        $("programStatusBtn").querySelector(".status-icon").innerHTML = gameIcon("program");
+        const upgradedPrograms = PROGRAMS.filter(program => comboLevel(program.id) > 1);
+        const highestProgram = Math.max(1, ...PROGRAMS.map(program => comboLevel(program.id)));
+        $("programShort").textContent = upgradedPrograms.length ? `L${highestProgram} · ${upgradedPrograms.length}` : "PROGRAMME";
+
+        renderDice();
+        renderGroupPicker();
+        renderGroups(preview);
+        $("comboHint").classList.add("hidden");
+        $("comboHint").innerHTML = "";
+
+        const maxTurnSlots = state.encounter?.id === "survival" ? 4 : Math.max(4, state.turnsLeft, 3);
+        const maxRerollSlots = Math.max(4, baseRerolls() + state.nextRound.rerolls, state.rerolls, 2);
+        const turnPips = Array.from({ length:maxTurnSlots }, (_, index) => `<span class="turn-pip turn ${index < state.turnsLeft ? "" : "empty"}"></span>`).join("");
+        const rerollPips = Array.from({ length:maxRerollSlots }, (_, index) => `<span class="turn-pip reroll ${index < state.rerolls ? "" : "empty"}"></span>`).join("");
+        $("turnsText").innerHTML = `<span class="substat-label">Züge übrig</span><div class="substat-main"><strong class="substat-value">${state.turnsLeft}</strong><span class="substat-copy">Moves</span></div><div class="substat-pips">${turnPips}</div>`;
+        $("rerollText").innerHTML = `<span class="substat-label">Re-rolls</span><div class="substat-main"><strong class="substat-value">${state.rerolls}</strong><span class="substat-copy">Versuche</span></div><div class="substat-pips">${rerollPips}</div>`;
+        $("rerollBtn").firstChild.textContent = state.turnRolled ? "NEU WÜRFELN\n          " : "WÜRFELN\n          ";
+        $("rerollSub").textContent = state.turnRolled ? `${state.rerolls}× verfügbar` : `Startwurf · ${state.rerolls} Re-rolls danach`;
+        $("pulseSub").textContent = state.pulseAvailable ? "1×" : "VERBRAUCHT";
+        $("pulseBtn").classList.toggle("used", !state.pulseAvailable);
+        $("pulseBtn").disabled = !state.turnRolled || !state.pulseAvailable || state.isRolling || state.isScoring;
+
+        $("flowStrip").querySelector(".flow-icon").innerHTML = gameIcon("flow");
+        $("flowLabel").textContent = preview.perfectFlow ? "×1,50" : `×${preview.maxFlow.toFixed(2).replace(".", ",")}`;
+        const flags = [];
+        if (preview.perfectFlow) flags.push("PERFECT");
+        if (preview.signature) flags.push(preview.signature.name.toUpperCase());
+        if (!preview.contractMet && state.contract) flags.push("30 %");
+        if (showEncounter && !preview.encounterMet) flags.push("ZIEL OFFEN");
+        $("flowFlags").textContent = flags.join(" · ") || "FLOW";
+        $("flowTotal").textContent = preview.total.toLocaleString("de-DE");
+
+        $("scoreSub").textContent = `${preview.total.toLocaleString("de-DE")} Punkte`;
+        $("rerollBtn").disabled = (state.turnRolled && state.rerolls <= 0) || state.isRolling || state.isScoring;
+        $("scoreBtn").disabled = !state.turnRolled || preview.total <= 0 || state.isRolling || state.isScoring;
+        $("gameScreen").classList.toggle("pre-roll", !state.turnRolled);
+      }
+
+      function renderDice() {
+        const grid = $("diceGrid");
+        grid.innerHTML = "";
+
+        state.dice.forEach(die => {
+          const data = DIE_TYPES[die.type];
+          const wrap = document.createElement("div");
+          wrap.className = `die-wrap type-${die.type} ${die.held ? "held" : ""} ${die.frozen ? "frozen" : ""} ${data.rarity === "rare" ? "rare" : ""}`;
+          wrap.dataset.dieId = die.id;
+
+          const groupBadge = document.createElement("div");
+          groupBadge.className = `group-badge g${die.group}`;
+          groupBadge.textContent = die.group ? `G${die.group}` : "";
+
+          const hold = document.createElement("button");
+          hold.className = "hold-btn";
+          hold.type = "button";
+          hold.disabled = !state.turnRolled || die.frozen || data.holdable === false || die.trait === "overcharged";
+          hold.setAttribute("aria-label", `${data.name}-Würfel ${die.held ? "freigeben" : "halten"}`);
+          hold.textContent = die.frozen ? "×" : (data.holdable === false || die.trait === "overcharged") ? "–" : die.held ? "●" : "○";
+          hold.addEventListener("click", event => {
+            event.stopPropagation();
+            toggleHold(die.id);
+          });
+
+          const button = document.createElement("button");
+          button.className = `die ${state.selectedDieId === die.id ? "selected" : ""}`;
+          button.type = "button";
+          button.dataset.dieId = die.id;
+          button.setAttribute("aria-label", `${data.name}-Würfel, Wert ${Number.isFinite(die.value) ? die.value : "noch nicht gewürfelt"}, Gruppe ${die.group || "keine"}`);
+          button.innerHTML = `<span class="die-value">${Number.isFinite(die.value) ? die.value : "?"}</span>`;
+          button.addEventListener("click", () => toggleGroup(die.id));
+
+          const label = document.createElement("div");
+          label.className = "die-type";
+          label.textContent = data.short;
+
+          const traitBadge = die.trait ? document.createElement("div") : null;
+          if (traitBadge) {
+            traitBadge.className = "die-trait-badge";
+            traitBadge.textContent = DIE_TRAITS[die.trait].symbol;
+            traitBadge.setAttribute("aria-label", DIE_TRAITS[die.trait].label);
+          }
+
+          const faceBadge = die.faceMod ? document.createElement("div") : null;
+          if (faceBadge) {
+            faceBadge.className = "die-face-badge";
+            faceBadge.textContent = "ƒ";
+            faceBadge.setAttribute("aria-label", `Face Lab: ${die.faceMod}`);
+          }
+
+          wrap.append(groupBadge, hold, button, label);
+          if (traitBadge) wrap.appendChild(traitBadge);
+          if (faceBadge) wrap.appendChild(faceBadge);
+          grid.appendChild(wrap);
+        });
+      }
+
+      function renderGroupPicker() {
+        const picker = $("groupPicker");
+        if (!picker) return;
+        const die = state.dice.find(entry => entry.id === state.selectedDieId);
+        const visible = Boolean(die && state.turnRolled && (settings.grouping || "select") === "select");
+        picker.classList.toggle("hidden", !visible);
+        if (!visible) return;
+        $("groupPickerLabel").textContent = `${DIE_TYPES[die.type].name} ${die.value} →`;
+        picker.querySelectorAll("[data-assign-group]").forEach(button => {
+          const group = Number(button.dataset.assignGroup);
+          button.disabled = group > maxGroups() || (die.type === "anchor" && ![0,1].includes(group));
+        });
+      }
+
       function buildCompassData() {
         const archetype = activeArchetype();
         const progress = archetypeProgress(archetype);
@@ -6592,7 +6735,7 @@
         const avg = state.stats.hands ? Math.round(state.stats.totalScore / state.stats.hands) : 0;
         return {
           schemaVersion:4,
-          gameVersion:"1.8",
+          gameVersion:"1.8.1",
           date:new Date().toISOString(),
           durationSeconds:state.runStartedAt ? Math.round((Date.now() - state.runStartedAt) / 1000) : null,
           startSet:state.startSet,
