@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <title>SET/5 v1.8 – Layout & Archetypes</title>
+  <title>SET/5 v1.8.2 – Layout & Shop Hotfix</title>
   <style>
     :root {
       --ink: #17171b;
@@ -2329,13 +2329,208 @@
       .shop-build-strip { grid-template-columns:1fr; }
     }
 
+
+    /* v1.8.2 · Mobile layout and shop hotfix */
+    #gameScreen:not(.hidden) {
+      height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      min-height:600px;
+      gap:9px;
+    }
+    #gameScreen .status-pill {
+      min-height:48px;
+      padding:7px 9px;
+      border-radius:16px;
+    }
+    #gameScreen .status-text { font-size:9px; }
+
+    #gameScreen .board {
+      padding:13px;
+      gap:10px;
+      grid-template-columns:minmax(0,1fr) minmax(142px,.75fr);
+      grid-template-rows:auto minmax(205px,1fr) auto auto;
+      border-radius:30px;
+    }
+    #gameScreen .substat {
+      min-height:68px;
+      padding:9px 12px;
+      border-radius:18px;
+    }
+    #gameScreen .substat-label { font-size:10px; }
+    #gameScreen .substat-value { font-size:29px; }
+    #gameScreen .turn-pip { width:10px; height:10px; }
+
+    #gameScreen .dice-grid {
+      width:100%;
+      max-width:292px;
+      margin:0 auto;
+      padding:8px 0 5px;
+      flex-wrap:wrap;
+      align-content:center;
+      align-items:center;
+      justify-content:center;
+      column-gap:12px;
+      row-gap:12px;
+    }
+    #gameScreen .die-wrap {
+      width:clamp(72px,19vw,82px);
+      padding-bottom:23px;
+    }
+    #gameScreen .die {
+      width:clamp(72px,19vw,82px);
+      height:clamp(72px,19vw,82px);
+      border-radius:21px;
+    }
+    #gameScreen .die-value { font-size:clamp(34px,9vw,42px); }
+    #gameScreen .hold-btn { width:29px; height:29px; }
+    #gameScreen .die-type { font-size:10px; }
+
+    #gameScreen .micro-control,
+    #gameScreen .flow-strip {
+      min-height:50px;
+      border-radius:16px;
+    }
+    #gameScreen .groups { gap:8px; }
+    #gameScreen .group-card {
+      min-height:56px;
+      padding:7px 9px;
+      border-radius:16px;
+      grid-template-columns:40px minmax(0,1fr) auto;
+    }
+    #gameScreen .group-title { width:32px; height:32px; }
+    #gameScreen .mini-die { width:26px; height:26px; font-size:13px; }
+    #gameScreen .combo-score { font-size:20px; }
+    #gameScreen .actions .primary-btn,
+    #gameScreen .actions .secondary-btn {
+      min-height:76px;
+      border-radius:22px;
+      font-size:18px;
+    }
+
+    /* Shop is one stable viewport. Offers scroll, actions stay reachable. */
+    #shopScreen {
+      overflow:hidden;
+      padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+    }
+    #shopScreen:not(.hidden) {
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+    }
+    #shopScreen .screen-card {
+      width:min(100%,460px);
+      height:100%;
+      min-height:0;
+      margin:0 auto;
+      padding:13px;
+      border-radius:26px;
+      display:grid;
+      grid-template-rows:auto minmax(0,1fr) auto auto;
+      gap:9px;
+      overflow:hidden;
+    }
+    #shopScreen .shop-header { margin:0; }
+    #shopScreen .shop-header h2 { font-size:24px; }
+    #shopScreen .shop-build-strip { margin-top:6px; }
+    #shopScreen .shop-economy { margin-top:6px; }
+    #shopOffers {
+      min-height:0;
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      padding:2px 3px 10px;
+      scroll-padding-bottom:12px;
+    }
+    #shopScreen .shop-grid { gap:9px; }
+    #shopScreen .offer {
+      min-height:104px;
+      padding:9px;
+      display:grid;
+      grid-template-columns:44px minmax(0,1fr) 58px 30px;
+      gap:7px;
+      align-items:center;
+    }
+    #shopScreen .offer-icon {
+      width:42px;
+      height:42px;
+      grid-column:1;
+    }
+    #shopScreen .offer > div {
+      grid-column:2;
+      min-width:0;
+    }
+    #shopScreen .offer h3 { font-size:14px; }
+    #shopScreen .offer p {
+      display:block;
+      overflow:visible;
+      font-size:10px;
+      line-height:1.25;
+      max-height:2.5em;
+    }
+    #shopScreen .buy-btn {
+      grid-column:3;
+      min-width:56px;
+      min-height:42px;
+      margin:0;
+      justify-self:stretch;
+    }
+    #shopScreen .offer-lock {
+      position:static;
+      grid-column:4;
+      width:30px;
+      height:30px;
+      border-radius:9px;
+    }
+    #shopScreen .pool-line {
+      margin:0;
+      max-height:70px;
+      overflow-y:auto;
+      padding:1px 0;
+    }
+    #shopScreen .shop-actions {
+      margin:0;
+      gap:8px;
+      grid-template-columns:.82fr 1fr 1.18fr;
+    }
+    #shopScreen .shop-actions button { min-height:54px; }
+
+    @media (max-height:740px) {
+      #gameScreen:not(.hidden) { gap:6px; }
+      #gameScreen .status-pill { min-height:42px; }
+      #gameScreen .board {
+        padding:9px;
+        gap:7px;
+        grid-template-rows:auto minmax(164px,1fr) auto auto;
+      }
+      #gameScreen .substat { min-height:54px; padding:6px 10px; }
+      #gameScreen .substat-value { font-size:25px; }
+      #gameScreen .dice-grid { max-width:270px; row-gap:7px; column-gap:9px; }
+      #gameScreen .die-wrap { width:clamp(64px,17vw,72px); padding-bottom:20px; }
+      #gameScreen .die { width:clamp(64px,17vw,72px); height:clamp(64px,17vw,72px); }
+      #gameScreen .group-card { min-height:48px; padding:5px 7px; }
+      #gameScreen .micro-control, #gameScreen .flow-strip { min-height:44px; }
+      #gameScreen .actions .primary-btn, #gameScreen .actions .secondary-btn { min-height:64px; }
+      #shopScreen .offer { min-height:92px; }
+    }
+
+    @media (max-width:370px) {
+      #gameScreen .dice-grid { max-width:250px; column-gap:8px; }
+      #gameScreen .die-wrap { width:68px; }
+      #gameScreen .die { width:68px; height:68px; }
+      #shopScreen .offer {
+        grid-template-columns:40px minmax(0,1fr) 52px 28px;
+        gap:5px;
+        padding:7px;
+      }
+      #shopScreen .offer-icon { width:38px; height:38px; }
+      #shopScreen .buy-btn { min-width:50px; font-size:10px; }
+    }
+
   </style>
 </head>
 <body>
   <main class="app">
     <section id="introScreen" class="screen-card">
       <div class="brand">SET<span>/5</span></div>
-      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.8</small></h1>
+      <h1>Dice-Roguelite Prototype <small style="font-size:12px;color:var(--muted)">v1.8.2</small></h1>
       <p>Wirf, halte und teile deine Würfel in bis zu drei Gruppen. Baue im Shop einen Run, der immer stärker und seltsamer wird.</p>
 
       <div class="intro-steps">
@@ -6735,7 +6930,7 @@
         const avg = state.stats.hands ? Math.round(state.stats.totalScore / state.stats.hands) : 0;
         return {
           schemaVersion:4,
-          gameVersion:"1.8.1",
+          gameVersion:"1.8.2",
           date:new Date().toISOString(),
           durationSeconds:state.runStartedAt ? Math.round((Date.now() - state.runStartedAt) / 1000) : null,
           startSet:state.startSet,

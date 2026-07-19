@@ -1,30 +1,42 @@
-# SET/5 – GitHub Pages v1.8
-
-## Neu
-
-- neu verteiltes One-Screen-Layout
-- flexibler, größerer Würfelbereich
-- keine Near-Combo-Hinweise
-- keine Glow- oder gestrichelten Würfelmarkierungen
-- Gruppenformel im Bottom Sheet
-- sechs klare Archetypen
-- CORE- und WANT-Anzeige
-- sechs seltene Capstones
-- buildnaher Shop-Bias
-- CHASE-Badges
-- buildnahe Pack-Karte als mögliche, nicht garantierte Option
-
-## Deployment
-
-Den Inhalt dieses Ordners in die Root-Ebene des GitHub-Repositories hochladen:
-
-- `index.html`
-- `404.html`
-- `manifest.webmanifest`
-- `sw.js`
-- `.nojekyll`
-- `icons/`
-
-Der Service Worker verwendet den Cache `set5-v1.8.0`.
-
-Nach dem Upload die Website einmal vollständig neu laden. Bei einer installierten Home-Screen-App die App schließen und erneut öffnen.
+{
+  "id": "./",
+  "name": "SET/5 Dice Roguelite",
+  "short_name": "SET/5",
+  "description": "SET/5 v1.8.2 – Dice Roguelite mit großzügigem Mobile-Layout und vollständig bedienbarem Shop.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#f7f4ec",
+  "theme_color": "#f7f4ec",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
