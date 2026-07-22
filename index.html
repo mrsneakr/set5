@@ -12,7 +12,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <title>SET/5 v2.5.8 – 3D Dice Board</title>
+  <title>SET/5 v2.5.9 – 3D Dice Board</title>
   <style>
     :root {
       --ink: #17171b;
@@ -3624,7 +3624,7 @@
 
   
 
-    /* v2.5.8 · Final status-card alignment */
+    /* v2.5.9 · Final status-card alignment */
     #gameScreen .substat {
       display: grid;
       grid-template-rows: 14px minmax(0,1fr);
@@ -3694,7 +3694,164 @@
       #gameScreen .turn-pip { width: 13px; height: 13px; flex-basis: 13px; }
     }
 
+  
+
+    /* v2.5.9 · iPhone responsiveness & native-selection lock */
+    html,
+    body,
+    body * {
+      -webkit-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+    }
+
+    img,
+    svg,
+    canvas {
+      -webkit-user-drag: none !important;
+      user-drag: none !important;
+    }
+
+    button,
+    a,
+    label,
+    canvas,
+    #gameScreen .dice3d-stage {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none !important;
+    }
+
+    #gameScreen .subline,
+    #gameScreen .substat,
+    #gameScreen .substat-row,
+    #gameScreen .substat-main,
+    #gameScreen .substat-pips {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    @media (max-width: 430px) {
+      .app {
+        width: 100%;
+        padding-left: max(9px, env(safe-area-inset-left));
+        padding-right: max(9px, env(safe-area-inset-right));
+      }
+
+      #gameScreen:not(.hidden) {
+        min-height: 0;
+        gap: 6px;
+      }
+
+      #gameScreen .board {
+        padding: 9px;
+        gap: 7px;
+        border-radius: 28px;
+        grid-template-columns: minmax(0, 1fr) minmax(116px, .68fr);
+      }
+
+      #gameScreen .subline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      #gameScreen .substat {
+        width: 100%;
+        height: 56px;
+        min-height: 56px;
+        padding: 6px 9px 7px;
+        border-radius: 16px;
+      }
+
+      #gameScreen .substat-label {
+        font-size: 9px;
+        line-height: 1;
+      }
+
+      #gameScreen .substat-row {
+        grid-template-columns: minmax(34px, .72fr) minmax(0, 1.28fr);
+        gap: 4px;
+      }
+
+      #gameScreen .substat-value {
+        font-size: clamp(27px, 8.4vw, 31px);
+        transform: none;
+      }
+
+      #gameScreen .substat-pips {
+        gap: clamp(3px, 1.35vw, 6px);
+        overflow: hidden;
+      }
+
+      #gameScreen .turn-pip {
+        width: clamp(10px, 3.1vw, 13px);
+        height: clamp(10px, 3.1vw, 13px);
+        flex: 0 1 clamp(10px, 3.1vw, 13px);
+      }
+    }
+
+    @media (max-width: 375px) {
+      .app {
+        padding-left: max(7px, env(safe-area-inset-left));
+        padding-right: max(7px, env(safe-area-inset-right));
+      }
+
+      #gameScreen .board {
+        padding: 8px;
+        gap: 6px;
+        border-radius: 25px;
+        grid-template-columns: minmax(0, 1fr) minmax(108px, .66fr);
+      }
+
+      #gameScreen .subline { gap: 6px; }
+
+      #gameScreen .substat {
+        height: 52px;
+        min-height: 52px;
+        padding: 5px 7px 6px;
+        border-radius: 15px;
+      }
+
+      #gameScreen .substat-label {
+        font-size: 8px;
+        letter-spacing: .07em;
+      }
+
+      #gameScreen .substat-row {
+        grid-template-columns: minmax(31px, .68fr) minmax(0, 1.32fr);
+        gap: 2px;
+      }
+
+      #gameScreen .substat-value {
+        font-size: clamp(25px, 8vw, 28px);
+      }
+
+      #gameScreen .substat-pips {
+        gap: 3px;
+      }
+
+      #gameScreen .turn-pip {
+        width: 10px;
+        height: 10px;
+        flex-basis: 10px;
+        border-width: 1.5px;
+      }
+    }
+
   </style>
+
+
+  <script>
+  (() => {
+    const blockNativeSelection = event => event.preventDefault();
+    document.addEventListener('selectstart', blockNativeSelection, { capture: true, passive: false });
+    document.addEventListener('dragstart', blockNativeSelection, { capture: true, passive: false });
+    document.addEventListener('contextmenu', blockNativeSelection, { capture: true, passive: false });
+    document.addEventListener('selectionchange', () => {
+      const selection = window.getSelection?.();
+      if (selection && selection.rangeCount) selection.removeAllRanges();
+    });
+  })();
+  </script>
 
   <script type="importmap">
   {
@@ -9095,9 +9252,11 @@
   function cycleGroup(id){const dbg=window.SET5_DEBUG;if(!dbg||dbg.state.phase!=='play'||dbg.state.isRolling||dbg.state.isScoring||!dbg.state.turnRolled)return;const d=dbg.state.dice.find(x=>x.id===id);if(!d)return;const max=dbg.state.boss?.id==='two_groups'?2:3;if(d.type==='anchor')d.group=d.group===1?0:1;else d.group=d.group>=max?0:d.group+1;dbg.state.selectedDieId=null;dbg.render();}
   function pulse(id){const die=dice.get(id);if(!die)return;die.pulseTime=.34;mapResultToTop(die);}
   let pointerDown=null;
-  renderer.domElement.addEventListener('pointerdown',event=>{const rect=renderer.domElement.getBoundingClientRect();const p=new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-((event.clientY-rect.top)/rect.height*2-1));const ray=new THREE.Raycaster();ray.setFromCamera(p,camera);const hit=ray.intersectObjects([...dice.values()].map(d=>d.mesh),false)[0];pointerDown=hit?{id:hit.object.userData.dieId,time:performance.now(),x:event.clientX,y:event.clientY}:null;});
-  renderer.domElement.addEventListener('pointerup',event=>{if(!pointerDown)return;const p=pointerDown;pointerDown=null;if(Math.hypot(event.clientX-p.x,event.clientY-p.y)>14)return;const duration=performance.now()-p.time;if(duration>430)window.SET5_DEBUG?.toggleHold?.(p.id);else cycleGroup(p.id);});
-  renderer.domElement.addEventListener('pointercancel',()=>pointerDown=null);
+  renderer.domElement.addEventListener('pointerdown',event=>{event.preventDefault();renderer.domElement.setPointerCapture?.(event.pointerId);const rect=renderer.domElement.getBoundingClientRect();const p=new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-((event.clientY-rect.top)/rect.height*2-1));const ray=new THREE.Raycaster();ray.setFromCamera(p,camera);const hit=ray.intersectObjects([...dice.values()].map(d=>d.mesh),false)[0];pointerDown=hit?{id:hit.object.userData.dieId,time:performance.now(),x:event.clientX,y:event.clientY}:null;});
+  renderer.domElement.addEventListener('pointerup',event=>{renderer.domElement.releasePointerCapture?.(event.pointerId);if(!pointerDown)return;const p=pointerDown;pointerDown=null;if(Math.hypot(event.clientX-p.x,event.clientY-p.y)>14)return;const duration=performance.now()-p.time;if(duration>430)window.SET5_DEBUG?.toggleHold?.(p.id);else cycleGroup(p.id);});
+  renderer.domElement.addEventListener('pointercancel',event=>{pointerDown=null;renderer.domElement.releasePointerCapture?.(event.pointerId);});
+  renderer.domElement.addEventListener('contextmenu',event=>event.preventDefault());
+  renderer.domElement.addEventListener('dragstart',event=>event.preventDefault());
 
   function resize(){const w=stage.clientWidth||1,h=stage.clientHeight||1;renderer.setSize(w,h,false);const aspect=w/h;camera.left=-frustum*aspect/2;camera.right=frustum*aspect/2;camera.top=frustum/2;camera.bottom=-frustum/2;camera.updateProjectionMatrix();}
   new ResizeObserver(resize).observe(stage);resize();

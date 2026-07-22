@@ -1,4 +1,4 @@
-const CACHE_NAME = "set5-v2.5.8-3d";
+const CACHE_NAME = "set5-v2.5.9-3d";
 const APP_SHELL = [
   "./",
   "./index.html",

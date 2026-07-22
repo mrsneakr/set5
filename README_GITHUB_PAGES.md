@@ -1,16 +1,17 @@
-# SET/5 – GitHub Pages v2.5.8 3D
+# SET/5 – GitHub Pages v2.5.9 3D
 
 ## Neu
-
-- konstante Beleuchtung ohne Textur-Neuberechnung in der Reihenanimation
-- Pack-/Boss-Cache-Reveal ohne mobilen Backface-Bug
-- vollständig geschlossener unsichtbarer Physik-Kasten
-- breiter gestreute Würfe
-- neue Würfel vermeiden gehaltene/eingefrorene Würfel beim Spawn
-- First-Roll-Fragezeichen-Hotfix
+- responsive Statusfelder für kleinere iPhone-Displays
+- globale Deaktivierung von Textauswahl und Safari-Touch-Callouts
+- Long-Press auf Würfeln löst kein Markieren der Seite mehr aus
+- Würfel-Physik und Spielmechanik unverändert aus v2.5.8
 
 ## Deployment
+Den vollständigen Inhalt dieses Ordners in die Repository-Root kopieren.
 
-Den vollständigen Inhalt dieses Ordners in die Repository-Root kopieren. Mindestens `index.html`, `404.html` und `sw.js` ersetzen.
+Mindestens ersetzen:
+- `index.html`
+- `404.html`
+- `sw.js`
 
-Cache: `set5-v2.5.8-3d`
+Der Service Worker verwendet den Cache `set5-v2.5.9-3d`.
