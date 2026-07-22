@@ -2,7 +2,7 @@
   "id": "./",
   "name": "SET/5 Dice Roguelite",
   "short_name": "SET/5",
-  "description": "SET/5 v1.9.1 – Mobile Dice Roguelite mit bereinigtem Status-Dock und kompaktem Score Theatre.",
+  "description": "SET/5 v2.5.8 – flüssiges 3D-Würfelboard, stabile Pack-Reveals und geschlossene Physikfläche.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",

@@ -1,22 +1,16 @@
-# SET/5 – GitHub Pages v1.9.1
+# SET/5 – GitHub Pages v2.5.8 3D
 
-## Behoben
+## Neu
 
-- MODS- und PROGRAMME-Felder werden unten nicht mehr abgeschnitten
-- Score Theatre verwendet jetzt den Look der restlichen App
-- keine übergroße leere Rechenfläche
-- keine angeschnittenen zukünftigen Wertungsschritte
-- maximal vorheriger + aktueller Schritt sichtbar
-- vollständige Rechnung bleibt separat erreichbar
+- konstante Beleuchtung ohne Textur-Neuberechnung in der Reihenanimation
+- Pack-/Boss-Cache-Reveal ohne mobilen Backface-Bug
+- vollständig geschlossener unsichtbarer Physik-Kasten
+- breiter gestreute Würfe
+- neue Würfel vermeiden gehaltene/eingefrorene Würfel beim Spawn
+- First-Roll-Fragezeichen-Hotfix
 
 ## Deployment
 
-Den vollständigen Inhalt dieses Ordners in die Repository-Root kopieren.
+Den vollständigen Inhalt dieses Ordners in die Repository-Root kopieren. Mindestens `index.html`, `404.html` und `sw.js` ersetzen.
 
-Mindestens ersetzen:
-
-- `index.html`
-- `404.html`
-- `sw.js`
-
-Der Service Worker verwendet den Cache `set5-v1.9.1`.
+Cache: `set5-v2.5.8-3d`
